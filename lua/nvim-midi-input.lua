@@ -1,3 +1,6 @@
+local uv = vim.loop
+local api = vim.api
+
 --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 --                                    Options
 --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -15,10 +18,18 @@ local options = {
 --                                   Variables
 --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-local job_id
+local job = {
+    handle = nil,
+    pid = nil,
+}
+local streams = {
+    stdin = uv.new_pipe(false),
+    stdout = uv.new_pipe(false),
+    stderr = uv.new_pipe(false),
+}
 
 local callbacks = {
-    on_stdout = function(job_id, data, event) --  {{{
+    stdout = function(data) --  {{{
         local nvim_mode = vim.api.nvim_get_mode().mode
         if nvim_mode == 'i' then
             local row, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -39,7 +50,7 @@ local callbacks = {
             data = string.format(
                 '%s%s%s',
                 prev_char_is_space and '' or ' ',
-                vim.trim(vim.fn.join(data)),
+                vim.trim(data),
                 next_char_is_space and '' or ' '
             )
 
@@ -51,7 +62,7 @@ local callbacks = {
         elseif nvim_mode == 'R' then
             -- search for next note/chord
             local search_pattern =
-            [[\v\s+\zs[abcdefg]%([ie]?s)*[',]*\=?[',]*|\<[^>]{-}\>]]
+                [[\v\s+\zs[abcdefg]%([ie]?s)*[',]*\=?[',]*|\<[^>]{-}\>]]
             local s_row, s_col = unpack(vim.fn.searchpos(search_pattern, 'cnW'))
             local e_row, e_col =
                 unpack(vim.fn.searchpos(search_pattern, 'cnWe'))
@@ -75,16 +86,16 @@ local callbacks = {
                 )
             end
         end
-    end,                                      --  }}}
-    on_stderr = function(job_id, data, event) --  {{{
-        local msg = vim.fn.join(data)
-        if not vim.fn.empty(msg) then
-            vim.cmd(string.format('echoerr %s', msg))
-        end
-    end,                                    --  }}}
-    on_exit = function(job_id, data, event) --  {{{
-        print(string.format('MIDI Input Listener exited (%s).', job_id))
-        job_id = nil
+    end, --  }}}
+    stderr = function(data) --  {{{
+        vim.api.nvim_err_writeln(data)
+    end, --  }}}
+    exit = function(code, signal) --  {{{
+        print(
+            string.format('MIDI Input Listener exited (%s) (%s).', code, signal)
+        )
+        job.handle = nil
+        job.pid = nil
     end, --  }}}
 }
 
@@ -130,7 +141,7 @@ local function updateMidiKey(key) --  {{{
         end)
     end
     print('TODO: Update key with: ' .. tostring(key))
-end                                               --  }}}
+end --  }}}
 
 local function updateMidiAccidentals(accidentals) --  {{{
     if not accidentals then
@@ -142,7 +153,7 @@ local function updateMidiAccidentals(accidentals) --  {{{
         end)
     end
     print('TODO: Update accidentals with: ' .. tostring(accidentals))
-end                                 --  }}}
+end --  }}}
 
 local function updateMidiMode(mode) --  {{{
     if not mode then
@@ -155,17 +166,17 @@ local function updateMidiMode(mode) --  {{{
         end)
     end
     print('TODO: Update mode with: ' .. tostring(mode))
-end                                               --  }}}
+end --  }}}
 
-local function updateMidiAlterations(alts)        --  {{{
+local function updateMidiAlterations(alts) --  {{{
     print('TODO: update alterations')
-end                                               --  }}}
+end --  }}}
 
 local function updateMidiGlobalAlterations(galts) --  {{{
     print('TODO: update global alterations')
-end                                               --  }}}
+end --  }}}
 
-local function updateMidiOptions()                --  {{{
+local function updateMidiOptions() --  {{{
     vim.ui.select({
         'key',
         'accidentals',
@@ -192,20 +203,52 @@ end --  }}}
 --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 vim.api.nvim_create_user_command('MidiInputStart', function()
-    if job_id then
-        print('A MIDI Input Listener is already running. Restarting ...')
-        vim.fn.jobstop(job_id)
-        job_id = nil
+    if job.pid then
+        print('A MIDI Input Listener is already running.')
+        return
     end
-    job_id =
-        vim.fn.jobstart({ 'lilypond-midi-input', options.device }, callbacks)
-    print(string.format('Started MIDI Input Listener (%s).', job_id))
-end, { desc = string.format('Start MIDI Input Listener (%s)', job_id) })
+
+    job.handle, job.pid = uv.spawn('lilypond-midi-input', {
+        args = { options.device },
+        stdio = { streams.stdin, streams.stdout, streams.stderr },
+    }, callbacks.exit)
+
+    uv.read_start(streams.stdout, function(err, data)
+        assert(not err, err)
+        if data then
+            vim.schedule(function()
+                -- when input is arriving very fast, it can happen that
+                -- multiple lines in stdin will be merged into a single `data`
+                for _, line in ipairs(vim.fn.split(data, [[\n]])) do
+                    callbacks.stdout(line)
+                end
+            end)
+        end
+    end)
+
+    uv.read_start(streams.stderr, function(err, data)
+        assert(not err, err)
+        if data then
+            vim.schedule(function()
+                callbacks.stderr(data)
+            end)
+        end
+    end)
+
+    print(
+        string.format(
+            'Started MIDI Input Listener (%s) (%s).',
+            job.handle,
+            job.pid
+        )
+    )
+end, { desc = 'Start MIDI Input Listener' })
 
 vim.api.nvim_create_user_command('MidiInputStop', function()
-    if job_id then
-        vim.fn.jobstop(job_id)
-        job_id = nil
+    if job.pid then
+        -- TODO: stop jo
+        -- job.handle = nil
+        -- job.pid = nil
     end
 end, { desc = 'Stop MIDI Input Listener' })
 
