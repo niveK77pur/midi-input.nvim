@@ -1,5 +1,5 @@
 local uv = vim.loop
-local api = vim.api
+local JOB = require('nvim-midi-input.job')
 
 --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 --                                    Options
@@ -15,100 +15,12 @@ local options = {
 }
 
 --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
---                                   Variables
---~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-local job = {
-    handle = nil,
-    pid = nil,
-}
-local streams = {
-    stdin = nil,
-    stdout = nil,
-    stderr = nil,
-}
-
-local callbacks = {
-    stdout = function(data) --  {{{
-        local nvim_mode = vim.api.nvim_get_mode().mode
-        if nvim_mode == 'i' then
-            local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-
-            local prev_char_is_space = true
-            local next_char_is_space = true
-            if col > 0 then
-                prev_char_is_space = vim.api
-                    .nvim_buf_get_text(0, row - 1, col - 1, row - 1, col, {})[1]
-                    :match('%s')
-            end
-            if col < vim.api.nvim_get_current_line():len() then
-                next_char_is_space = vim.api
-                    .nvim_buf_get_text(0, row - 1, col, row - 1, col + 1, {})[1]
-                    :match('%s')
-            end
-
-            data = string.format(
-                '%s%s%s',
-                prev_char_is_space and '' or ' ',
-                vim.trim(data),
-                next_char_is_space and '' or ' '
-            )
-
-            vim.api.nvim_buf_set_text(0, row - 1, col, row - 1, col, { data })
-            vim.api.nvim_win_set_cursor(
-                0,
-                { row, col + data:len() + (next_char_is_space and 0 or -1) }
-            )
-        elseif nvim_mode == 'R' then
-            -- search for next note/chord
-            local search_pattern =
-                [[\v\s+\zs[abcdefg]%([ie]?s)*[',]*\=?[',]*|\<[^>]{-}\>]]
-            local s_row, s_col = unpack(vim.fn.searchpos(search_pattern, 'cnW'))
-            local e_row, e_col =
-                unpack(vim.fn.searchpos(search_pattern, 'cnWe'))
-
-            if -- a match was found
-                not (s_row == 0 and s_col == 0)
-                and not (e_row == 0 and e_col == 0)
-            then
-                data = vim.trim(vim.fn.join(data))
-                vim.api.nvim_buf_set_text(
-                    0,
-                    s_row - 1,
-                    s_col - 1,
-                    e_row - 1,
-                    e_col,
-                    { data }
-                )
-                vim.api.nvim_win_set_cursor(
-                    0,
-                    { s_row, s_col - 1 + data:len() }
-                )
-            end
-        end
-    end, --  }}}
-    stderr = function(data) --  {{{
-        vim.api.nvim_err_writeln(data)
-    end, --  }}}
-    exit = function(code, signal) --  {{{
-        print(
-            string.format('MIDI Input Listener exited (%s) (%s).', code, signal)
-        )
-        job.handle = nil
-        job.pid = nil
-        streams.stdin = nil
-        streams.stdout = nil
-        streams.stderr = nil
-    end, --  }}}
-}
-
---~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 --                                   Functions
 --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 function _G.write_stream(s)
     -- without the newline, Rust won't take the input
-    local result = uv.write(streams.stdin, string.format('%s\n', vim.trim(s)))
+    local result = uv.write(JOB.stdin, string.format('%s\n', vim.trim(s)))
     print('>> Write:', vim.inspect(result))
 end
 
@@ -210,69 +122,16 @@ local function updateMidiOptions() --  {{{
     end)
 end --  }}}
 
-local function closeMidi()
-    if job.handle then
-        local result = uv.process_kill(job.handle, 1)
-        print('MIDI CLOSED:', result)
-        job.handle = nil
-        job.pid = nil
-        streams.stdin = nil
-        streams.stdout = nil
-        streams.stderr = nil
-    end
-end
-
 --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 --                                   Commands
 --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 vim.api.nvim_create_user_command('MidiInputStart', function()
-    if job.pid then
-        print('A MIDI Input Listener is already running.')
-        return
-    end
-
-    streams.stdin = uv.new_pipe()
-    streams.stdout = uv.new_pipe()
-    streams.stderr = uv.new_pipe()
-    job.handle, job.pid = uv.spawn('lilypond-midi-input', {
-        args = { options.device },
-        stdio = { streams.stdin, streams.stdout, streams.stderr },
-    }, callbacks.exit)
-
-    uv.read_start(streams.stdout, function(err, data)
-        assert(not err, err)
-        if data then
-            vim.schedule(function()
-                -- when input is arriving very fast, it can happen that
-                -- multiple lines in stdin will be merged into a single `data`
-                for _, line in ipairs(vim.fn.split(data, [[\n]])) do
-                    callbacks.stdout(line)
-                end
-            end)
-        end
-    end)
-
-    uv.read_start(streams.stderr, function(err, data)
-        assert(not err, err)
-        if data then
-            vim.schedule(function()
-                callbacks.stderr(data)
-            end)
-        end
-    end)
-
-    print(
-        string.format(
-            'Started MIDI Input Listener (%s) (%s).',
-            job.handle,
-            job.pid
-        )
-    )
+    JOB:start('out')
 end, { desc = 'Start MIDI Input Listener' })
 
 vim.api.nvim_create_user_command('MidiInputStop', function()
-    closeMidi()
+    JOB:stop()
 end, { desc = 'Stop MIDI Input Listener' })
 
 vim.api.nvim_create_user_command('MidiInputUpdateOptions', updateMidiOptions, {
@@ -291,7 +150,7 @@ vim.api.nvim_create_autocmd({ 'ExitPre', 'QuitPre' }, {
     pattern = { '*' },
     desc = 'Quit the MIDI Input Listener',
     callback = function()
-        closeMidi()
+        JOB:stop()
     end,
 })
 
