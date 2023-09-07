@@ -1,28 +1,13 @@
-local job = require('nvim-midi-input.job')
-local update = require('nvim-midi-input.update')
+local options = require('nvim-midi-input.options')
 
---~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
---                                    Options
---~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-local options = {
-    device = nil,
-    key = 'cM',
-    accidentals = 'sharps',
-    mode = 'pedal',
-    alterations = {},
-    global_alterations = {},
-}
-
---~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
---                                    Plugin
---~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 local M = {}
 
 function M.setup(opts)
-    print('Hello MIDI input')
-    options = vim.tbl_deep_extend('force', options, opts)
+    options:set(opts or {
+        key = 'cM',
+        accidentals = 'sharps',
+        mode = 'chord',
+    })
 end
 
 return M
--- vim: fdm=marker
