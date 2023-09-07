@@ -1,4 +1,4 @@
-local JOB = require('nvim-midi-input.job')
+local job = require('nvim-midi-input.job')
 local update = require('nvim-midi-input.update')
 
 --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -19,11 +19,11 @@ local options = {
 --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 vim.api.nvim_create_user_command('MidiInputStart', function()
-    JOB:start('out')
+    job:start('out')
 end, { desc = 'Start MIDI Input Listener' })
 
 vim.api.nvim_create_user_command('MidiInputStop', function()
-    JOB:stop()
+    job:stop()
 end, { desc = 'Stop MIDI Input Listener' })
 
 vim.api.nvim_create_user_command(
@@ -46,7 +46,7 @@ vim.api.nvim_create_autocmd({ 'ExitPre', 'QuitPre' }, {
     pattern = { '*' },
     desc = 'Quit the MIDI Input Listener',
     callback = function()
-        JOB:stop()
+        job:stop()
     end,
 })
 
