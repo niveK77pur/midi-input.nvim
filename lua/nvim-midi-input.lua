@@ -23,9 +23,9 @@ local job = {
     pid = nil,
 }
 local streams = {
-    stdin = uv.new_pipe(false),
-    stdout = uv.new_pipe(false),
-    stderr = uv.new_pipe(false),
+    stdin = uv.new_pipe(),
+    stdout = uv.new_pipe(),
+    stderr = uv.new_pipe(),
 }
 
 local callbacks = {
@@ -103,6 +103,12 @@ local callbacks = {
 --                                   Functions
 --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+function _G.write_stream(s)
+    -- without the newline, Rust won't take the input
+    local result = uv.write(streams.stdin, string.format('%s\n', vim.trim(s)))
+    print('>> Write:', vim.inspect(result))
+end
+
 local function updateMidiKey(key) --  {{{
     if not key then
         vim.ui.select({
@@ -137,10 +143,11 @@ local function updateMidiKey(key) --  {{{
             'DSharpMinor',
             'ASharpMinor',
         }, { prompt = 'Chose a musical key' }, function(choice)
-            print('TODO: Update key with: ' .. tostring(choice))
+            _G.write_stream(string.format('key=%s', choice))
         end)
+    else
+        _G.write_stream(string.format('key=%s', key))
     end
-    print('TODO: Update key with: ' .. tostring(key))
 end --  }}}
 
 local function updateMidiAccidentals(accidentals) --  {{{
@@ -149,10 +156,11 @@ local function updateMidiAccidentals(accidentals) --  {{{
             'Sharps',
             'Flats',
         }, { prompt = 'Chose an accidentals style' }, function(choice)
-            print('TODO: Update accidentals with: ' .. tostring(choice))
+            _G.write_stream(string.format('accidentals=%s', choice))
         end)
+    else
+        _G.write_stream(string.format('accidentals=%s', accidentals))
     end
-    print('TODO: Update accidentals with: ' .. tostring(accidentals))
 end --  }}}
 
 local function updateMidiMode(mode) --  {{{
@@ -162,10 +170,11 @@ local function updateMidiMode(mode) --  {{{
             'Chord',
             'Pedal',
         }, { prompt = 'Chose a MIDI input mode' }, function(choice)
-            print('TODO: Update mode with: ' .. tostring(choice))
+            _G.write_stream(string.format('mode=%s', choice))
         end)
+    else
+        _G.write_stream(string.format('mode=%s', mode))
     end
-    print('TODO: Update mode with: ' .. tostring(mode))
 end --  }}}
 
 local function updateMidiAlterations(alts) --  {{{
