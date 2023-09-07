@@ -41,7 +41,7 @@ function C.stdout(data) --  {{{
             not (s_row == 0 and s_col == 0)
             and not (e_row == 0 and e_col == 0)
         then
-            data = vim.trim(vim.fn.join(data))
+            data = vim.trim(data)
             vim.api.nvim_buf_set_text(
                 0,
                 s_row - 1,
