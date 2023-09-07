@@ -23,9 +23,9 @@ local job = {
     pid = nil,
 }
 local streams = {
-    stdin = uv.new_pipe(),
-    stdout = uv.new_pipe(),
-    stderr = uv.new_pipe(),
+    stdin = nil,
+    stdout = nil,
+    stderr = nil,
 }
 
 local callbacks = {
@@ -96,6 +96,9 @@ local callbacks = {
         )
         job.handle = nil
         job.pid = nil
+        streams.stdin = nil
+        streams.stdout = nil
+        streams.stderr = nil
     end, --  }}}
 }
 
@@ -213,6 +216,9 @@ local function closeMidi()
         print('MIDI CLOSED:', result)
         job.handle = nil
         job.pid = nil
+        streams.stdin = nil
+        streams.stdout = nil
+        streams.stderr = nil
     end
 end
 
@@ -226,6 +232,9 @@ vim.api.nvim_create_user_command('MidiInputStart', function()
         return
     end
 
+    streams.stdin = uv.new_pipe()
+    streams.stdout = uv.new_pipe()
+    streams.stderr = uv.new_pipe()
     job.handle, job.pid = uv.spawn('lilypond-midi-input', {
         args = { options.device },
         stdio = { streams.stdin, streams.stdout, streams.stderr },
