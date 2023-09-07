@@ -198,6 +198,15 @@ local function updateMidiOptions() --  {{{
     end)
 end --  }}}
 
+local function closeMidi()
+    if job.handle then
+        local result = uv.process_kill(job.handle, 1)
+        print('MIDI CLOSED:', result)
+        job.handle = nil
+        job.pid = nil
+    end
+end
+
 --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 --                                   Commands
 --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -245,11 +254,7 @@ vim.api.nvim_create_user_command('MidiInputStart', function()
 end, { desc = 'Start MIDI Input Listener' })
 
 vim.api.nvim_create_user_command('MidiInputStop', function()
-    if job.pid then
-        -- TODO: stop jo
-        -- job.handle = nil
-        -- job.pid = nil
-    end
+    closeMidi()
 end, { desc = 'Stop MIDI Input Listener' })
 
 vim.api.nvim_create_user_command('MidiInputUpdateOptions', updateMidiOptions, {
@@ -268,10 +273,7 @@ vim.api.nvim_create_autocmd({ 'ExitPre', 'QuitPre' }, {
     pattern = { '*' },
     desc = 'Quit the MIDI Input Listener',
     callback = function()
-        if job_id then
-            vim.fn.jobstop(job_id)
-            job_id = nil
-        end
+        closeMidi()
     end,
 })
 
