@@ -1,4 +1,4 @@
-local O = {
+local options = {
     device = nil,
     key = nil,
     accidentals = nil,
@@ -7,12 +7,14 @@ local O = {
     global_alterations = nil,
 }
 
-function O:set(opts)
-    vim.tbl_deep_extend('force', self, opts)
+local O = {}
+
+function O.set(opts)
+    options = vim.tbl_deep_extend('force', options, opts)
 end
 
-function O:update(opts)
-    self:set(opts)
+function O.get()
+    return options
 end
 
 return O
