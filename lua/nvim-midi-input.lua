@@ -1,4 +1,3 @@
-local uv = vim.loop
 local JOB = require('nvim-midi-input.job')
 
 --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -17,12 +16,6 @@ local options = {
 --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 --                                   Functions
 --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-function _G.write_stream(s)
-    -- without the newline, Rust won't take the input
-    local result = uv.write(JOB.stdin, string.format('%s\n', vim.trim(s)))
-    print('>> Write:', vim.inspect(result))
-end
 
 local function updateMidiKey(key) --  {{{
     if not key then
@@ -58,10 +51,10 @@ local function updateMidiKey(key) --  {{{
             'DSharpMinor',
             'ASharpMinor',
         }, { prompt = 'Chose a musical key' }, function(choice)
-            _G.write_stream(string.format('key=%s', choice))
+            JOB:write(string.format('key=%s', choice))
         end)
     else
-        _G.write_stream(string.format('key=%s', key))
+        JOB:write(string.format('key=%s', key))
     end
 end --  }}}
 
@@ -71,10 +64,10 @@ local function updateMidiAccidentals(accidentals) --  {{{
             'Sharps',
             'Flats',
         }, { prompt = 'Chose an accidentals style' }, function(choice)
-            _G.write_stream(string.format('accidentals=%s', choice))
+            JOB:write(string.format('accidentals=%s', choice))
         end)
     else
-        _G.write_stream(string.format('accidentals=%s', accidentals))
+        JOB:write(string.format('accidentals=%s', accidentals))
     end
 end --  }}}
 
@@ -85,10 +78,10 @@ local function updateMidiMode(mode) --  {{{
             'Chord',
             'Pedal',
         }, { prompt = 'Chose a MIDI input mode' }, function(choice)
-            _G.write_stream(string.format('mode=%s', choice))
+            JOB:write(string.format('mode=%s', choice))
         end)
     else
-        _G.write_stream(string.format('mode=%s', mode))
+        JOB:write(string.format('mode=%s', mode))
     end
 end --  }}}
 
