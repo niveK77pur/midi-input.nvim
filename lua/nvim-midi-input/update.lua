@@ -1,6 +1,10 @@
-local job = require('nvim-midi-input.job') local U = {}
+local job = require('nvim-midi-input.job')
+local U = {}
 
 function U.updateMidiKey(key) --  {{{
+    if not job:is_running() then
+        return
+    end
     if not key then
         vim.ui.select({
             'CFlatMajor',
@@ -42,6 +46,9 @@ function U.updateMidiKey(key) --  {{{
 end --  }}}
 
 function U.updateMidiAccidentals(accidentals) --  {{{
+    if not job:is_running() then
+        return
+    end
     if not accidentals then
         vim.ui.select({
             'Sharps',
@@ -55,6 +62,9 @@ function U.updateMidiAccidentals(accidentals) --  {{{
 end --  }}}
 
 function U.updateMidiMode(mode) --  {{{
+    if not job:is_running() then
+        return
+    end
     if not mode then
         vim.ui.select({
             'Single',
@@ -69,16 +79,21 @@ function U.updateMidiMode(mode) --  {{{
 end --  }}}
 
 function U.updateMidiAlterations(alts) --  {{{
+    if not job:is_running() then
+        return
+    end
     print('TODO: update alterations')
 end --  }}}
 
 function U.updateMidiGlobalAlterations(galts) --  {{{
+    if not job:is_running() then
+        return
+    end
     print('TODO: update global alterations')
 end --  }}}
 
 function U.updateMidiOptions() --  {{{
-    if not job.pid then
-        print('Midi input is not running. Aborting.')
+    if not job:is_running() then
         return
     end
     vim.ui.select({

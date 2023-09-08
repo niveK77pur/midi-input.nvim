@@ -9,6 +9,14 @@ local J = {
     callbacks = require('nvim-midi-input.callbacks'),
 }
 
+function J:is_running()
+    local running = (self.pid and self.handle) ~= nil
+    if not running then
+        print('MIDI input is not running.')
+    end
+    return running
+end
+
 function J:clear()
     self.handle = nil
     self.pid = nil
@@ -67,7 +75,7 @@ function J:start(device)
 end
 
 function J:stop()
-    if self.handle then
+    if self:is_running() then
         uv.process_kill(self.handle, 1)
         self:clear()
     end
