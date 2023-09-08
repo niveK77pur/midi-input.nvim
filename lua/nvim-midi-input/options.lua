@@ -23,7 +23,6 @@ function O.query_devices(func)
         ipairs(vim.fn.systemlist('lilypond-midi-input --list-devices'))
     do
         table.insert(choices, string.match(line, [[^[^:]+:%s*(.*)]]))
-        print(vim.inspect(choices))
     end
     vim.ui.select(
         choices,

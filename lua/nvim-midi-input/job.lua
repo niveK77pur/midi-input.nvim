@@ -19,8 +19,7 @@ end
 
 function J:write(s)
     -- without the newline, Rust won't take the input
-    local result = uv.write(self.stdin, string.format('%s\n', vim.trim(s)))
-    print('>> Write:', vim.inspect(result))
+    uv.write(self.stdin, string.format('%s\n', vim.trim(s)))
 end
 
 function J:start(device)
@@ -69,8 +68,7 @@ end
 
 function J:stop()
     if self.handle then
-        local result = uv.process_kill(self.handle, 1)
-        print('MIDI CLOSED:', result)
+        uv.process_kill(self.handle, 1)
         self:clear()
     end
 end
