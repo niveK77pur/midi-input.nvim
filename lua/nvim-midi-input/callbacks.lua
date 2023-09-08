@@ -56,7 +56,13 @@ function C.stdout(data) --  {{{
 end --  }}}
 
 function C.stderr(data) --  {{{
-    vim.api.nvim_err_writeln(data)
+    local info = data:match([[^:: (.*)]])
+    local error = data:match([[^!! (.*)]])
+    if info then
+        print('MIDI Input:', info)
+    elseif error then
+        vim.api.nvim_err_writeln(string.format('Midi Input Error: %s', error))
+    end
 end --  }}}
 
 function C.exit(code, signal) --  {{{
