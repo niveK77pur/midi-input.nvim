@@ -33,7 +33,7 @@ function C.stdout(data) --  {{{
     elseif nvim_mode == 'R' then
         -- search for next note/chord
         local search_pattern =
-            [[\v\s+\zs[abcdefg]%([ie]?s)*[',]*\=?[',]*|\<[^>]{-}\>]]
+            [[\v%(^|\s+)\zs[abcdefg]%([ie]?s)*[',]*\=?[',]*|\<[^>]{-}\>]]
         local s_row, s_col = unpack(vim.fn.searchpos(search_pattern, 'cnW'))
         local e_row, e_col = unpack(vim.fn.searchpos(search_pattern, 'cnWe'))
 
