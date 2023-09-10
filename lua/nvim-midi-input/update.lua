@@ -1,45 +1,33 @@
 local job = require('nvim-midi-input.job')
 local U = {}
 
+local function getOptions(arg)
+    local choices = {}
+    for _, line in
+        ipairs(
+            vim.fn.systemlist(
+                string.format('lilypond-midi-input --list-options %s', arg)
+            )
+        )
+    do
+        local value = line:match('^([^%s]+)')
+        table.insert(choices, value)
+    end
+    return choices
+end
+
 function U.updateMidiKey(key) --  {{{
     if not job:is_running() then
         return
     end
     if not key then
-        vim.ui.select({
-            'CFlatMajor',
-            'GFlatMajor',
-            'DFlatMajor',
-            'AFlatMajor',
-            'EFlatMajor',
-            'BFlatMajor',
-            'FMajor',
-            'CMajor',
-            'GMajor',
-            'DMajor',
-            'AMajor',
-            'EMajor',
-            'BMajor',
-            'FSharpMajor',
-            'CSharpMajor',
-            'AFlatMinor',
-            'EFlatMinor',
-            'BFlatMinor',
-            'FMinor',
-            'CMinor',
-            'GMinor',
-            'DMinor',
-            'AMinor',
-            'EMinor',
-            'BMinor',
-            'FSharpMinor',
-            'CSharpMinor',
-            'GSharpMinor',
-            'DSharpMinor',
-            'ASharpMinor',
-        }, { prompt = 'Chose a musical key' }, function(choice)
-            job:write(string.format('key=%s', choice))
-        end)
+        vim.ui.select(
+            getOptions('key'),
+            { prompt = 'Chose a musical key' },
+            function(choice)
+                job:write(string.format('key=%s', choice))
+            end
+        )
     else
         job:write(string.format('key=%s', key))
     end
@@ -50,12 +38,13 @@ function U.updateMidiAccidentals(accidentals) --  {{{
         return
     end
     if not accidentals then
-        vim.ui.select({
-            'Sharps',
-            'Flats',
-        }, { prompt = 'Chose an accidentals style' }, function(choice)
-            job:write(string.format('accidentals=%s', choice))
-        end)
+        vim.ui.select(
+            getOptions('accidentals'),
+            { prompt = 'Chose an accidentals style' },
+            function(choice)
+                job:write(string.format('accidentals=%s', choice))
+            end
+        )
     else
         job:write(string.format('accidentals=%s', accidentals))
     end
@@ -66,14 +55,13 @@ function U.updateMidiMode(mode) --  {{{
         return
     end
     if not mode then
-        vim.ui.select({
-            'Single',
-            'Chord',
-            'PedalChord',
-            'PedalSingle',
-        }, { prompt = 'Chose a MIDI input mode' }, function(choice)
-            job:write(string.format('mode=%s', choice))
-        end)
+        vim.ui.select(
+            getOptions('mode'),
+            { prompt = 'Chose a MIDI input mode' },
+            function(choice)
+                job:write(string.format('mode=%s', choice))
+            end
+        )
     else
         job:write(string.format('mode=%s', mode))
     end
