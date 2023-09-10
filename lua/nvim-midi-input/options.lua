@@ -37,4 +37,20 @@ function O.query_devices(func)
     )
 end
 
+function O.parse_alterations(alts)
+    if type(alts) == 'string' then
+        return alts
+    elseif type(alts) == 'table' then
+        local s = ''
+        for key, value in pairs(alts) do
+            s = string.format('%s,%s:%s', s, key, value)
+        end
+        return s
+    else
+        vim.api.nvim_err_writeln(
+            'Invalid type for alterations. String or Table.'
+        )
+    end
+end
+
 return O

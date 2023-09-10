@@ -61,11 +61,14 @@ function J:start(device)
     end
     if options.get().alterations then
         table.insert(args, '--alterations')
-        table.insert(args, options.get().alterations)
+        table.insert(args, options.parse_alterations(options.get().alterations))
     end
     if options.get().global_alterations then
         table.insert(args, '--global-alterations')
-        table.insert(args, options.get().global_alterations)
+        table.insert(
+            args,
+            options.parse_alterations(options.get().global_alterations)
+        )
     end
 
     self.handle, self.pid = uv.spawn('lilypond-midi-input', {

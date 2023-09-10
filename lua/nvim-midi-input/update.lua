@@ -1,4 +1,5 @@
 local job = require('nvim-midi-input.job')
+local options = require('nvim-midi-input.options')
 local U = {}
 
 local function getOptions(arg)
@@ -71,14 +72,22 @@ function U.updateMidiAlterations(alts) --  {{{
     if not job:is_running() then
         return
     end
-    print('TODO: update alterations')
+    if not alts then
+        alts = vim.fn.input('Enter alterations: ')
+    end
+    job:write(string.format('alterations=%s', options.parse_alterations(alts)))
 end --  }}}
 
 function U.updateMidiGlobalAlterations(galts) --  {{{
     if not job:is_running() then
         return
     end
-    print('TODO: update global alterations')
+    if not galts then
+        galts = vim.fn.input('Enter global alterations: ')
+    end
+    job:write(
+        string.format('global-alterations=%s', options.parse_alterations(galts))
+    )
 end --  }}}
 
 function U.updateMidiOptions() --  {{{
