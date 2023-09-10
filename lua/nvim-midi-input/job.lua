@@ -32,6 +32,10 @@ function J:write(s)
 end
 
 function J:start(device)
+    if self:is_running(false) then
+        print('MIDI input is already running.')
+        return
+    end
     if not device then
         vim.api.nvim_err_writeln('No MIDI device was specified. Aborting.')
         return
