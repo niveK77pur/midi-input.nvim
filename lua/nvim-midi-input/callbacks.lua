@@ -36,7 +36,7 @@ function C.stdout(data) --  {{{
             [[\v%(^|\s+)\zs[abcdefg]%([ie]?s)*[',]*\=?[',]*|\<[^>]{-}\>]]
         local s_row, s_col = unpack(vim.fn.searchpos(search_pattern, 'cnW'))
         local e_row, e_col = unpack(vim.fn.searchpos(search_pattern, 'cnWe'))
-        if s_col > e_col then
+        if s_col > e_col or s_row > e_row then
             -- we are inside a note and must search backwards for its beginning
             s_row, s_col = unpack(vim.fn.searchpos(search_pattern, 'cnWb'))
         end
