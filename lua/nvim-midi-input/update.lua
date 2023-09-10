@@ -69,7 +69,8 @@ function U.updateMidiMode(mode) --  {{{
         vim.ui.select({
             'Single',
             'Chord',
-            'Pedal',
+            'PedalChord',
+            'PedalSingle',
         }, { prompt = 'Chose a MIDI input mode' }, function(choice)
             job:write(string.format('mode=%s', choice))
         end)
