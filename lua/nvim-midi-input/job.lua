@@ -1,4 +1,5 @@
 local uv = vim.loop
+local options = require('nvim-midi-input.options')
 
 local J = {
     handle = nil,
@@ -40,11 +41,35 @@ function J:start(device)
         vim.api.nvim_err_writeln('No MIDI device was specified. Aborting.')
         return
     end
+
     self.stdin = uv.new_pipe()
     self.stdout = uv.new_pipe()
     self.stderr = uv.new_pipe()
+
+    local args = { device }
+    if options.get().key then
+        table.insert(args, '--key')
+        table.insert(args, options.get().key)
+    end
+    if options.get().accidentals then
+        table.insert(args, '--accidentals')
+        table.insert(args, options.get().accidentals)
+    end
+    if options.get().mode then
+        table.insert(args, '--mode')
+        table.insert(args, options.get().mode)
+    end
+    if options.get().alterations then
+        table.insert(args, '--alterations')
+        table.insert(args, options.get().alterations)
+    end
+    if options.get().global_alterations then
+        table.insert(args, '--global-alterations')
+        table.insert(args, options.get().global_alterations)
+    end
+
     self.handle, self.pid = uv.spawn('lilypond-midi-input', {
-        args = { device },
+        args = args,
         stdio = { self.stdin, self.stdout, self.stderr },
     }, self.callbacks.exit)
 
