@@ -9,9 +9,10 @@ local J = {
     callbacks = require('nvim-midi-input.callbacks'),
 }
 
-function J:is_running()
+function J:is_running(show_message)
+    local show_message = show_message or true
     local running = (self.pid and self.handle) ~= nil
-    if not running then
+    if not running and show_message then
         print('MIDI input is not running.')
     end
     return running
