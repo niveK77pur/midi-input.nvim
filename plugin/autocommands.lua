@@ -18,7 +18,9 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
     pattern = { '*' },
     desc = 'Find and set previous chord',
     callback = function()
-        print('hello')
+        if not job:is_running(false) then
+            return
+        end
         local search_pattern = [[\v\<[^>]{-}\>]]
         local cpos = vim.api.nvim_win_get_cursor(0)
         local e_row, e_col = unpack(vim.fn.searchpos(search_pattern, 'Wbe'))
