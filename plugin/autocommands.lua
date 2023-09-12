@@ -44,8 +44,8 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
             ':'
         )
         if debug.enabled() then
-            debug.markStartEnd(s_row - 1, s_col - 1, e_row - 1, e_col - 1)
             print('Chord: ', chord)
+            debug.markStartEnd(s_row - 1, s_col - 1, e_row - 1, e_col - 1)
             return
         end
         print('Chord: ', chord)
