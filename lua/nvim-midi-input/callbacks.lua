@@ -1,4 +1,5 @@
 local debug = require('nvim-midi-input.debug')
+local options = require('nvim-midi-input.options')
 local C = {}
 
 function C.stdout(data) --  {{{
@@ -35,6 +36,9 @@ function C.stdout(data) --  {{{
         -- search for next note/chord
         local search_pattern =
             [[\v%(^|\s+)\zs[abcdefg]%([ie]?s)*[',]*\=?[',]*|\<[^>]{-}\>]]
+        if options.get().replace_q then
+            search_pattern = search_pattern .. [[|\s+\zsq]]
+        end
         local s_row, s_col = unpack(vim.fn.searchpos(search_pattern, 'cnW'))
         local e_row, e_col = unpack(vim.fn.searchpos(search_pattern, 'cnWe'))
         if s_col > e_col or s_row > e_row then

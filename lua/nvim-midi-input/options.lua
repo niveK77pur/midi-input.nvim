@@ -5,6 +5,7 @@ local options = {
     mode = nil,
     alterations = nil,
     global_alterations = nil,
+    replace_q = true,
     debug = false,
 }
 
