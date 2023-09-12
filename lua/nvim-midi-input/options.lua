@@ -5,6 +5,7 @@ local options = {
     mode = nil,
     alterations = nil,
     global_alterations = nil,
+    debug = false,
 }
 
 local O = {}

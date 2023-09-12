@@ -1,3 +1,4 @@
+local debug = require('nvim-midi-input.debug')
 local C = {}
 
 function C.stdout(data) --  {{{
@@ -39,6 +40,10 @@ function C.stdout(data) --  {{{
         if s_col > e_col or s_row > e_row then
             -- we are inside a note and must search backwards for its beginning
             s_row, s_col = unpack(vim.fn.searchpos(search_pattern, 'cnWb'))
+        end
+        if debug.enabled() then
+            debug.markStartEnd(s_row - 1, s_col - 1, e_row - 1, e_col - 1)
+            return
         end
 
         if -- a match was found
