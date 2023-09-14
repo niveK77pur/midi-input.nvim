@@ -22,7 +22,6 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
             return
         end
         local search_pattern = [[\v\<[^>]{-}\>]]
-        local cpos = vim.api.nvim_win_get_cursor(0)
         local e_row, e_col = unpack(vim.fn.searchpos(search_pattern, 'Wbe'))
         local s_row, s_col = unpack(vim.fn.searchpos(search_pattern, 'nWb'))
         if e_row == 0 and e_col == 0 then
@@ -33,7 +32,6 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
             job:write('previous-chord=clear')
             return
         end
-        vim.api.nvim_win_set_cursor(0, cpos)
         local chord = string.gsub(
             vim.api.nvim_buf_get_text(
                 0,
