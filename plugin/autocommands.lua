@@ -21,7 +21,7 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
         if not (job:is_running(false) or debug.enabled()) then
             return
         end
-        local search_pattern = [[\v\<[^>]{-}\>]]
+        local search_pattern = [[\v\<@<!\<\<@![^>]{-}\>]]
         local e_row, e_col = unpack(vim.fn.searchpos(search_pattern, 'Wbe'))
         local s_row, s_col = unpack(vim.fn.searchpos(search_pattern, 'nWb'))
         if e_row == 0 and e_col == 0 then
