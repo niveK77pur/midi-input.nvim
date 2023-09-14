@@ -18,7 +18,7 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
     pattern = { '*' },
     desc = 'Find and set previous chord',
     callback = function()
-        if not job:is_running(false) then
+        if not (job:is_running(false) or debug.enabled()) then
             return
         end
         local search_pattern = [[\v\<[^>]{-}\>]]
