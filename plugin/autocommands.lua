@@ -26,7 +26,10 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
         local e_row, e_col = unpack(vim.fn.searchpos(search_pattern, 'Wbe'))
         local s_row, s_col = unpack(vim.fn.searchpos(search_pattern, 'nWb'))
         if e_row == 0 and e_col == 0 then
-            -- no match was found
+            if debug.enabled() then
+                print('no match was found')
+                return
+            end
             job:write('previous-chord=clear')
             return
         end
