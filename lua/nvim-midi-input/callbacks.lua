@@ -1,12 +1,12 @@
 local debug = require('nvim-midi-input.debug')
 local options = require('nvim-midi-input.options')
-local C = {}
 
----Callback for handling the stdout stream from job
----@param data string A single string coming in from the job's output stream
-function C.stdout(data) --  {{{
-    local nvim_mode = vim.api.nvim_get_mode().mode
-    if nvim_mode == 'i' then
+---Table of callbacks for each desired mode. See `:h mode()`.
+---@private
+local modeCallback = {
+    ---Callback for insert mode
+    ---@param data string
+    ['i'] = function(data)
         local row, col = unpack(vim.api.nvim_win_get_cursor(0))
 
         local prev_char_is_space = true
@@ -34,7 +34,10 @@ function C.stdout(data) --  {{{
             0,
             { row, col + data:len() + (next_char_is_space and 0 or -1) }
         )
-    elseif nvim_mode == 'R' then
+    end,
+    ---Callback for replace mode
+    ---@param data string
+    ['R'] = function(data)
         -- search for next note/chord
         local search_pattern =
             [[\v%(^|\s+)\zs[abcdefg]%([ie]?s)*[',]*\=?[',]*|\<[^>]{-}\>]]
@@ -68,6 +71,17 @@ function C.stdout(data) --  {{{
             )
             vim.api.nvim_win_set_cursor(0, { s_row, s_col - 1 + data:len() })
         end
+    end,
+}
+
+local C = {}
+
+---Callback for handling the stdout stream from job
+---@param data string A single string coming in from the job's output stream
+function C.stdout(data) --  {{{
+    local callback = modeCallback[vim.api.nvim_get_mode().mode]
+    if callback then
+        callback(data)
     end
 end --  }}}
 
