@@ -10,6 +10,10 @@ local J = {
     callbacks = require('nvim-midi-input.callbacks'),
 }
 
+---Check if another job is already running
+---@param show_message boolean? Whether or not to display message in case the job is not running. Default: `true`
+---@return boolean
+---@nodiscard
 function J:is_running(show_message)
     local show_message = show_message or true
     local running = (self.pid and self.handle) ~= nil
@@ -19,6 +23,7 @@ function J:is_running(show_message)
     return running
 end
 
+---Clear the job variables after it was stopped
 function J:clear()
     self.handle = nil
     self.pid = nil
@@ -27,11 +32,15 @@ function J:clear()
     self.stderr = nil
 end
 
+---Write data into the job's stream/stdin
+---@param s string Data to be sent
 function J:write(s)
     -- without the newline, Rust won't take the input
     uv.write(self.stdin, string.format('%s\n', vim.trim(s)))
 end
 
+---Start a new job (if not already running)
+---@param device string The MIDI input device's name
 function J:start(device)
     if self:is_running(false) then
         print('MIDI input is already running.')
@@ -107,6 +116,7 @@ function J:start(device)
     )
 end
 
+---Stop the currently running job. Silently exit if not running.
 function J:stop()
     if self:is_running() then
         uv.process_kill(self.handle, 1)

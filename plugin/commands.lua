@@ -2,6 +2,11 @@ local job = require('nvim-midi-input.job')
 local update = require('nvim-midi-input.update')
 local options = require('nvim-midi-input.options')
 
+---@private
+---Check if the given device name is among the list of available devices.
+---See `lilypond-midi-input --list-devices`.
+---@param device string The MIDI input device name
+---@return boolean # Whether or not the device exists
 local function deviceExists(device)
     for _, device_name in ipairs(options.get_devices()) do
         if vim.trim(device) == vim.trim(device_name) then

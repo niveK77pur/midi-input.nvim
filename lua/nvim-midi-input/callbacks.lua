@@ -2,6 +2,8 @@ local debug = require('nvim-midi-input.debug')
 local options = require('nvim-midi-input.options')
 local C = {}
 
+---Callback for handling the stdout stream from job
+---@param data string A single string coming in from the job's output stream
 function C.stdout(data) --  {{{
     local nvim_mode = vim.api.nvim_get_mode().mode
     if nvim_mode == 'i' then
@@ -69,6 +71,8 @@ function C.stdout(data) --  {{{
     end
 end --  }}}
 
+---Callback for handling the stderr stream from the job
+---@param data string A single string coming in from the job's error stream
 function C.stderr(data) --  {{{
     local info = data:match([[^:: (.*)]])
     local error = data:match([[^!! (.*)]])
@@ -79,6 +83,10 @@ function C.stderr(data) --  {{{
     end
 end --  }}}
 
+---Callback for handling proper closing of the job upon exiting
+---@param code integer
+---@param signal integer
+---@see uv.spawn
 function C.exit(code, signal) --  {{{
     print(string.format('MIDI Input Listener exited (%s) (%s).', code, signal))
     require('nvim-midi-input.job'):clear()

@@ -2,6 +2,10 @@ local job = require('nvim-midi-input.job')
 local options = require('nvim-midi-input.options')
 local U = {}
 
+---@private
+---Get a list of options directly from `lilypond-midi-input`
+---@param arg string Option to list, see `lilypond-midi-input --list-options`
+---@return string[]
 local function getOptions(arg)
     local choices = {}
     for _, line in
@@ -17,6 +21,8 @@ local function getOptions(arg)
     return choices
 end
 
+---Update/Change the musical key. See `lilypond-midi-input --list-options key`.
+---@param key string? If not specified, the user will be prompted to select from a list of options.
 function U.updateMidiKey(key) --  {{{
     if not job:is_running() then
         return
@@ -34,6 +40,8 @@ function U.updateMidiKey(key) --  {{{
     end
 end --  }}}
 
+---Update/Change the accidental style. See `lilypond-midi-input --list-options accidentals`.
+---@param accidentals string? If not specified, the user will be prompted to select from a list of options.
 function U.updateMidiAccidentals(accidentals) --  {{{
     if not job:is_running() then
         return
@@ -51,6 +59,8 @@ function U.updateMidiAccidentals(accidentals) --  {{{
     end
 end --  }}}
 
+---Update/Change the MIDI input mode. See `lilypond-midi-input --list-options mode`.
+---@param mode string? If not specified, the user will be prompted to select from a list of options.
 function U.updateMidiMode(mode) --  {{{
     if not job:is_running() then
         return
@@ -68,6 +78,8 @@ function U.updateMidiMode(mode) --  {{{
     end
 end --  }}}
 
+---Update the alterations. See `lilypond-midi-input`'s documentation.
+---@param alts Alterations|string
 function U.updateMidiAlterations(alts) --  {{{
     if not job:is_running() then
         return
@@ -78,6 +90,8 @@ function U.updateMidiAlterations(alts) --  {{{
     job:write(string.format('alterations=%s', options.parse_alterations(alts)))
 end --  }}}
 
+---Update the global alterations. See `lilypond-midi-input`'s documentation.
+---@param galts Alterations|string
 function U.updateMidiGlobalAlterations(galts) --  {{{
     if not job:is_running() then
         return
@@ -90,6 +104,9 @@ function U.updateMidiGlobalAlterations(galts) --  {{{
     )
 end --  }}}
 
+---Convenience function for updating options. It renders all options and their
+---values highly discoverable by having the user navigate through a list of
+---options and possible values.
 function U.updateMidiOptions() --  {{{
     if not job:is_running() then
         return
