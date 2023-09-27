@@ -23,8 +23,10 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
             return
         end
         local search_pattern = [[\v\<@<!\<\<@![^>]{-}\>]]
+        local cursor = vim.api.nvim_win_get_cursor(0)
         local e_row, e_col = unpack(vim.fn.searchpos(search_pattern, 'Wbe'))
         local s_row, s_col = unpack(vim.fn.searchpos(search_pattern, 'nWb'))
+        vim.api.nvim_win_set_cursor(0, cursor)
         if debug.enabled() then
             print(e_row, e_col, s_row, s_col)
             debug.markStartEnd(s_row - 1, s_col - 1, e_row - 1, e_col - 1)
