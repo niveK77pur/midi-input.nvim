@@ -25,6 +25,10 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
         local search_pattern = [[\v\<@<!\<\<@![^>]{-}\>]]
         local e_row, e_col = unpack(vim.fn.searchpos(search_pattern, 'Wbe'))
         local s_row, s_col = unpack(vim.fn.searchpos(search_pattern, 'nWb'))
+        if debug.enabled() then
+            print(e_row, e_col, s_row, s_col)
+            debug.markStartEnd(s_row - 1, s_col - 1, e_row - 1, e_col - 1)
+        end
         if e_row == 0 and e_col == 0 then
             if debug.enabled() then
                 print('no match was found')
@@ -47,7 +51,6 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
         )
         if debug.enabled() then
             print('Chord: ', chord)
-            debug.markStartEnd(s_row - 1, s_col - 1, e_row - 1, e_col - 1)
             return
         end
         print('Chord: ', chord)
