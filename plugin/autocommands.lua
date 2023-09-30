@@ -87,21 +87,26 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
             end
             return
         end
-        local key, scale = string.match(vim.api.nvim_buf_get_text(
-            0,
-            s_row - 1,
-            s_col - 1,
-            e_row - 1,
-            e_col,
-            {}
-        )[1], [[\key%s+(%w+)%s\(%w+)]])
+        local key, scale = string.match(
+            vim.api.nvim_buf_get_text(
+                0,
+                s_row - 1,
+                s_col - 1,
+                e_row - 1,
+                e_col,
+                {}
+            )[1],
+            [[\key%s+(%w+)%s\(%w+)]]
+        )
         local scale_short
         if scale == 'minor' then
             scale_short = 'm'
         elseif scale == 'major' then
             scale_short = 'M'
         else
-            vim.api.nvim_err_writeln(string.format("Unknown scale provided: %s", scale))
+            vim.api.nvim_err_writeln(
+                string.format('Unknown scale provided: %s', scale)
+            )
         end
         if debug.enabled() then
             print('Key, Scale:', key, scale, scale_short)
@@ -128,7 +133,7 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
             if debug.enabled() then
                 print(s_row, s_col, e_row, e_col)
                 vim.api.nvim_err_writeln(
-                'No previous lilypond-midi-input settings found'
+                    'No previous lilypond-midi-input settings found'
                 )
             end
             return
@@ -139,12 +144,12 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
             return
         end
         local lmi_options = vim.api.nvim_buf_get_text(
-        0,
-        s_row - 1,
-        s_col - 1,
-        e_row - 1,
-        e_col,
-        {}
+            0,
+            s_row - 1,
+            s_col - 1,
+            e_row - 1,
+            e_col,
+            {}
         )[1]
         if debug.enabled() then
             print(vim.inspect(lmi_options))
