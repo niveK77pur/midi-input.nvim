@@ -9,11 +9,11 @@ local U = {}
 local function getOptions(arg)
     local choices = {}
     for _, line in
-        ipairs(
-            vim.fn.systemlist(
-                string.format('lilypond-midi-input --list-options %s', arg)
-            )
+    ipairs(
+        vim.fn.systemlist(
+            string.format('lilypond-midi-input --list-options %s', arg)
         )
+    )
     do
         local value = line:match('^([^%s]+)')
         table.insert(choices, value)
@@ -104,6 +104,20 @@ function U.updateMidiGlobalAlterations(galts) --  {{{
     )
 end --  }}}
 
+function U.updateReplaceQ(value)
+    if not value then
+        vim.ui.select(
+            { 'yes', 'no' },
+            { prompt = 'Should `q` be replaced?' },
+            function(choice)
+                options.set({ replace_q = (choice == 'yes'), debug = options.get().debug })
+            end
+        )
+    else
+        options.set({ replace_q = value, debug = options.get().debug })
+    end
+end
+
 ---Convenience function for updating options. It renders all options and their
 ---values highly discoverable by having the user navigate through a list of
 ---options and possible values.
@@ -117,6 +131,7 @@ function U.updateMidiOptions() --  {{{
         'mode',
         'alterations',
         'global alterations',
+        'replace q',
     }, { prompt = 'Select an option' }, function(choice)
         ({
             key = U.updateMidiKey,
@@ -124,6 +139,7 @@ function U.updateMidiOptions() --  {{{
             mode = U.updateMidiMode,
             alterations = U.updateMidiAlterations,
             ['global alterations'] = U.updateMidiGlobalAlterations,
+            ['replace q'] = U.updateReplaceQ,
         })[choice]()
     end)
 end --  }}}
