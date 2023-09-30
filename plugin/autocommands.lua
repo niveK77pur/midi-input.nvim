@@ -65,6 +65,9 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
     pattern = { '*' },
     desc = 'Find and set previous key signature',
     callback = function()
+        if not (job:is_running(false) or debug.enabled()) then
+            return
+        end
         local key_pattern = [[\v\\key\s+]]
             .. '[[:alpha:]]'
             .. [[+\s+\\%(major|minor)]]
