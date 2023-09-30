@@ -111,3 +111,45 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
         job:write(string.format('key=%s', key .. scale_short))
     end,
 })
+
+vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
+    group = augroup_midideviceinput,
+    pattern = { '*' },
+    desc = 'Find and set lilypond-midi-input options',
+    callback = function()
+        if not (job:is_running(false) or debug.enabled()) then
+            return
+        end
+        local key_pattern = [[\v\%\s+lmi:\s+\zs.*$]]
+        local s_row, s_col = unpack(vim.fn.searchpos(key_pattern, 'bWn'))
+        local e_row, e_col = unpack(vim.fn.searchpos(key_pattern, 'bWne'))
+        print(s_row, s_col, e_row, e_col)
+        if s_row == 0 and s_col == 0 and e_row == 0 and e_col == 0 then
+            if debug.enabled() then
+                print(s_row, s_col, e_row, e_col)
+                vim.api.nvim_err_writeln(
+                'No previous lilypond-midi-input settings found'
+                )
+            end
+            return
+        elseif s_row > e_row or s_col > e_col then
+            if debug.enabled() then
+                vim.api.nvim_err_writeln('Inside an options definition.')
+            end
+            return
+        end
+        local lmi_options = vim.api.nvim_buf_get_text(
+        0,
+        s_row - 1,
+        s_col - 1,
+        e_row - 1,
+        e_col,
+        {}
+        )[1]
+        if debug.enabled() then
+            print(vim.inspect(lmi_options))
+            return
+        end
+        job:write(lmi_options)
+    end,
+})
