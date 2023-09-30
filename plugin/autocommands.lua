@@ -77,7 +77,9 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
             if debug.enabled() then
                 vim.api.nvim_err_writeln('No previous key signature found.')
             end
-            job:write(string.format('key=%s', options.get().key or 'cM'))
+            if job:is_running(false) then
+                job:write(string.format('key=%s', options.get().key or 'cM'))
+            end
             return
         elseif s_row > e_row or s_col > e_col then
             if debug.enabled() then
