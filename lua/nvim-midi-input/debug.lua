@@ -31,10 +31,15 @@ function D.markStartEnd(s_row, s_col, e_row, e_col)
 end
 
 ---Check if the debugging option is set or not.
+---@param debugger string? Which debugger to enable? If not specified, checks if debugging is set at all.
 ---@return boolean is_enabled
 ---@nodiscard
-function D.enabled()
-    return options.get().debug
+function D.enabled(debugger)
+    if debugger then
+        return options.get().debug == debugger
+    else
+        return options.get().debug ~= nil
+    end
 end
 
 return D

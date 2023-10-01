@@ -19,7 +19,7 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
     pattern = { '*' },
     desc = 'Find and set previous chord',
     callback = function()
-        if not (job:is_running(false) or debug.enabled()) then
+        if not (job:is_running(false) or debug.enabled('previous chord')) then
             return
         end
         local search_pattern = [[\v\<@<!\<\<@![^>]{-}\>]]
@@ -27,12 +27,12 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
         local e_row, e_col = unpack(vim.fn.searchpos(search_pattern, 'Wbe'))
         local s_row, s_col = unpack(vim.fn.searchpos(search_pattern, 'nWb'))
         vim.api.nvim_win_set_cursor(0, cursor)
-        if debug.enabled() then
+        if debug.enabled('previous chord') then
             print(e_row, e_col, s_row, s_col)
             debug.markStartEnd(s_row - 1, s_col - 1, e_row - 1, e_col - 1)
         end
         if e_row == 0 and e_col == 0 then
-            if debug.enabled() then
+            if debug.enabled('previous chord') then
                 print('no match was found')
                 return
             end
@@ -51,8 +51,10 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
             '%s+',
             ':'
         )
-        if debug.enabled() then
+        if debug.enabled('previous chord') then
             print('Chord: ', chord)
+        end
+        if debug.enabled() then
             return
         end
         print('Chord: ', chord)
@@ -65,7 +67,7 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
     pattern = { '*' },
     desc = 'Find and set previous key signature',
     callback = function()
-        if not (job:is_running(false) or debug.enabled()) then
+        if not (job:is_running(false) or debug.enabled('key signature')) then
             return
         end
         local key_pattern = [[\v\\key\s+]]
@@ -74,7 +76,7 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
         local s_row, s_col = unpack(vim.fn.searchpos(key_pattern, 'bWn'))
         local e_row, e_col = unpack(vim.fn.searchpos(key_pattern, 'bWne'))
         if s_row == 0 and s_col == 0 and e_row == 0 and e_col == 0 then
-            if debug.enabled() then
+            if debug.enabled('key signature') then
                 vim.api.nvim_err_writeln('No previous key signature found.')
             end
             if job:is_running(false) then
@@ -82,7 +84,7 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
             end
             return
         elseif s_row > e_row or s_col > e_col then
-            if debug.enabled() then
+            if debug.enabled('key signature') then
                 vim.api.nvim_err_writeln('Inside a key signature definition.')
             end
             return
@@ -108,9 +110,11 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
                 string.format('Unknown scale provided: %s', scale)
             )
         end
-        if debug.enabled() then
+        if debug.enabled('key signature') then
             print('Key, Scale:', key, scale, scale_short)
             debug.markStartEnd(s_row - 1, s_col - 1, e_row - 1, e_col - 1)
+        end
+        if debug.enabled() then
             return
         end
         job:write(string.format('key=%s', key .. scale_short))
@@ -122,7 +126,7 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
     pattern = { '*' },
     desc = 'Find and set lilypond-midi-input options',
     callback = function()
-        if not (job:is_running(false) or debug.enabled()) then
+        if not (job:is_running(false) or debug.enabled('input options')) then
             return
         end
         local key_pattern = [[\v\%\s+lmi:\s+\zs.*$]]
@@ -130,7 +134,7 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
         local e_row, e_col = unpack(vim.fn.searchpos(key_pattern, 'bWne'))
         print(s_row, s_col, e_row, e_col)
         if s_row == 0 and s_col == 0 and e_row == 0 and e_col == 0 then
-            if debug.enabled() then
+            if debug.enabled('input options') then
                 print(s_row, s_col, e_row, e_col)
                 vim.api.nvim_err_writeln(
                     'No previous lilypond-midi-input settings found'
@@ -138,7 +142,7 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
             end
             return
         elseif s_row > e_row or s_col > e_col then
-            if debug.enabled() then
+            if debug.enabled('input options') then
                 vim.api.nvim_err_writeln('Inside an options definition.')
             end
             return
@@ -151,8 +155,10 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
             e_col,
             {}
         )[1]
-        if debug.enabled() then
+        if debug.enabled('input options') then
             print(vim.inspect(lmi_options))
+        end
+        if debug.enabled() then
             return
         end
         job:write(lmi_options)

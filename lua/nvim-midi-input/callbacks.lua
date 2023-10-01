@@ -50,9 +50,11 @@ local modeCallback = {
             -- we are inside a note and must search backwards for its beginning
             s_row, s_col = unpack(vim.fn.searchpos(search_pattern, 'cnWb'))
         end
-        if debug.enabled() then
+        if debug.enabled('replace mode') then
             print(s_row, s_col, e_row, e_col)
             debug.markStartEnd(s_row - 1, s_col - 1, e_row - 1, e_col - 1)
+        end
+        if debug.enabled() then
             return
         end
 
