@@ -7,6 +7,9 @@ local modeCallback = {
     ---Callback for insert mode
     ---@param data string
     ['i'] = function(data)
+        if debug.enabled() then
+            return
+        end
         local row, col = unpack(vim.api.nvim_win_get_cursor(0))
 
         local prev_char_is_space = true

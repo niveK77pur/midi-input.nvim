@@ -27,17 +27,17 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
         local e_row, e_col = unpack(vim.fn.searchpos(search_pattern, 'Wbe'))
         local s_row, s_col = unpack(vim.fn.searchpos(search_pattern, 'nWb'))
         vim.api.nvim_win_set_cursor(0, cursor)
-        if debug.enabled('previous chord') then
-            print(e_row, e_col, s_row, s_col)
-            debug.markStartEnd(s_row - 1, s_col - 1, e_row - 1, e_col - 1)
-        end
         if e_row == 0 and e_col == 0 then
             if debug.enabled('previous chord') then
-                print('no match was found')
+                vim.api.nvim_err_writeln('No previous chord found.')
                 return
             end
             job:write('previous-chord=clear')
             return
+        end
+        if debug.enabled('previous chord') then
+            print(e_row, e_col, s_row, s_col)
+            debug.markStartEnd(s_row - 1, s_col - 1, e_row - 1, e_col - 1)
         end
         local chord = string.gsub(
             vim.api.nvim_buf_get_text(
@@ -157,6 +157,7 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
         )[1]
         if debug.enabled('input options') then
             print(vim.inspect(lmi_options))
+            debug.markStartEnd(s_row - 1, s_col - 1, e_row - 1, e_col - 1)
         end
         if debug.enabled() then
             return
