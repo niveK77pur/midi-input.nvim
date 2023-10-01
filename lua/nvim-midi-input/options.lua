@@ -8,6 +8,7 @@
 ---@field alterations Alterations? Custom alterations within an octave
 ---@field global_alterations Alterations? Global alterations over all notes
 ---@field replace_q boolean Whether or not a `q` should be replaced in Replace mode
+---@field replace_in_comment boolean Whether or not to replace inside comments in Replace mode
 ---@field debug string? Whether or not debugging should be enabled, and which one; will disable certain functionalities
 
 ---@type MidiOptions
@@ -19,6 +20,7 @@ local options = {
     alterations = nil,
     global_alterations = nil,
     replace_q = true,
+    replace_in_comment = false,
     debug = nil,
 }
 

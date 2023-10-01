@@ -57,6 +57,42 @@ local modeCallback = {
             print(s_row, s_col, e_row, e_col)
             debug.markStartEnd(s_row - 1, s_col - 1, e_row - 1, e_col - 1)
         end
+        if not options.get().replace_in_comment then
+            -- check if inside a comment
+            vim.api.nvim_win_set_cursor(0, { s_row, s_col - 1 })
+            local c_row, c_col = unpack(vim.fn.searchpos([[%[{}]\@!]], 'cnbW'))
+            if
+                c_row ~= 0
+                and c_col ~= 0
+                and c_row == s_row
+                and c_col < s_col
+            then
+                if debug.enabled('replace mode') then
+                    vim.api.nvim_err_writeln(
+                        'Next note/chord is inside a single-line comment'
+                    )
+                end
+                return
+            end
+            local ms_row, ms_col = unpack(vim.fn.searchpos([[%{]], 'cnbW'))
+            local me_row, me_col = unpack(vim.fn.searchpos([[%}]], 'cnW'))
+            if
+                (ms_row ~= 0 and ms_col ~= 0 and me_row ~= 0 and me_col ~= 0)
+                and (
+                    (ms_row < s_row and s_row < me_row)
+                    or (ms_row == s_row and ms_col < s_col)
+                    or (me_row == e_row and s_col < me_col)
+                )
+            then
+                if debug.enabled('replace mode') then
+                    print(c_row, c_col, ms_row, ms_col, me_row, me_col)
+                    vim.api.nvim_err_writeln(
+                        'Next note/chord is inside a multi-line comment'
+                    )
+                end
+                return
+            end
+        end
         if debug.enabled() then
             return
         end
