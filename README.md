@@ -172,6 +172,15 @@ alterations = {
 global_alterations = '80:SIKE',
 ```
 
+Debugging this plugin can be done by setting either of the following (they are mutually exclusive, and only 1 can be set). Text input will be disabled, and the corresponding action will be debugged. This includes printing releant information, as well as setting extmarks to see which regions were matched/found when searching backwards by the relevant autocommand.
+
+```lua
+debug = 'input options'
+debug = 'key signature'
+debug = 'previous chord'
+debug = 'replace mode'
+```
+
 # TODO
 
 - [x] Plugin options are not taken into account
