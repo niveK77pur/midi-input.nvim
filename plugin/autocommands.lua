@@ -57,7 +57,6 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
         if debug.enabled() then
             return
         end
-        print('Chord: ', chord)
         job:write(string.format('previous-chord=%s', chord))
     end,
 })
@@ -132,7 +131,6 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
         local key_pattern = [[\v\%\s+lmi:\s+\zs.*$]]
         local s_row, s_col = unpack(vim.fn.searchpos(key_pattern, 'bWn'))
         local e_row, e_col = unpack(vim.fn.searchpos(key_pattern, 'bWne'))
-        print(s_row, s_col, e_row, e_col)
         if s_row == 0 and s_col == 0 and e_row == 0 and e_col == 0 then
             if debug.enabled('input options') then
                 print(s_row, s_col, e_row, e_col)

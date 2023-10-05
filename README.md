@@ -201,7 +201,7 @@ debug = 'replace mode'
 - [x] Add debug option to highlight start and end of found regions (replace, find last note/chord, etc)
 - [ ] Repeated notes could insert duration as shorthand (similar to `q`)
 - [x] Option to have `q`s be replaced as well
-- [ ] Remove/Replace prints from development
+- [x] Remove/Replace prints from development
 - [x] Find previously set key
 - [x] Place config options into the lilypond file at specific points (similar to bar line counting)
 - [ ] Add/Create health checks (backend is installed? Portmidi installed? Necessary options are provided?) `:h health-dev`
