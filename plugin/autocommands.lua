@@ -174,6 +174,32 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
             e_col,
             {}
         )[1]
+        if lmi_options:match('^disable') then
+            if debug.enabled('input options') then
+                print(vim.inspect(lmi_options))
+                vim.api.nvim_err_writeln(
+                    string.format(
+                        'Explicitly falling back to default settings: accidentals=%s mode=%s alterations=%s global-alterations=%s',
+                        options.get().accidentals,
+                        options.get().mode,
+                        options.parse_alterations(options.get().alterations),
+                        options.parse_alterations(
+                            options.get().global_alterations
+                        )
+                    )
+                )
+                return
+            end
+            job:write(
+                string.format(
+                    'accidentals=%s mode=%s alterations=%s global-alterations=%s',
+                    options.get().accidentals,
+                    options.get().mode,
+                    options.get().alterations,
+                    options.get().global_alterations
+                )
+            )
+        end
         if debug.enabled('input options') then
             print(vim.inspect(lmi_options))
             debug.markStartEnd(s_row - 1, s_col - 1, e_row - 1, e_col - 1)

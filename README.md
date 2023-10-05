@@ -125,6 +125,13 @@ An autocommand will search backwards from the current cursor position for such c
 
 If no options are found searching backwards, then currently set options (either form the [plugin config](#at-plugin-initialization), or the [update menu](#using-the-update-menus)) will be restored. If an option has not been specified, its default value will be `nil` (due to how Lua works); you will see an error by the backend saying that `nil` is an invalid value. This error can be ignored, but it also means that the corresponding option cannot be *reset*. If you always want a default fallback option, it is encouraged to specify all relevant option in the [plugin config](#at-plugin-initialization).
 
+A special first value of `disable` allows *disabling* this modeline-like functionality and using the previous config values (same as those if no options were found). Anything after this point will behave as if no `% lmi: ` options were given. Note that the value MUST be the first value among the provided options; any following options will of course be ignored then.
+
+```lilypond
+% lmi: disable
+% lmi: disable these options here will be ignored
+```
+
 ## List of options
 
 The name of the device to be used. If set and available, `:MMidiInputStart` will directly launch the backend without asking to select a device.
@@ -208,7 +215,7 @@ debug = 'replace mode'
 - [ ] Add `build.lua` for [lazy.nvim][lazy]
 - [x] `MidiInputUpdateOptions` should also change internal values
 - [x] `% lmi: ` should revert to default options if not found (but do not set if found)
-- [ ] `% lmi: ` should have a special key to revert to using default options
+- [x] `% lmi: ` should have a special key to revert to using default options
 
 [lmi]: https://github.com/niveK77pur/lilypond-midi-input
 [lmi-usage]: https://github.com/niveK77pur/lilypond-midi-input#basic-usage
