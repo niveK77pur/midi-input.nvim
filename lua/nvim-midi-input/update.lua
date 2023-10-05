@@ -112,6 +112,8 @@ function U.updateMidiGlobalAlterations(galts) --  {{{
     options.set({ global_alterations = galts })
 end --  }}}
 
+---Update the replace_q value.
+---@param value boolean?
 function U.updateReplaceQ(value)
     if not value then
         vim.ui.select(
