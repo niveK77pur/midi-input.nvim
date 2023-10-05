@@ -1,4 +1,4 @@
----@alias Alterations table<number, string>
+---@alias Alterations string|table<number, string>
 
 ---@class MidiOptions
 ---@field device string? MIDI input device name
