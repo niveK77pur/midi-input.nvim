@@ -121,7 +121,9 @@ Note that you MUST have a `%` comment character, followed by one or more spaces,
 <some music> % lmi: a=f
 ```
 
-An autocommand will search backwards from the current cursor position for such comments, upon entering insert mode. If options are found, they will be sent and thus set in `lilypond-midi-input`. If no options are found searching backwards, then nothing is changed (currently this also means that options previously set by another `lmi:` will stick around).
+An autocommand will search backwards from the current cursor position for such comments, upon entering insert mode. If options are found, they will be sent and thus set in `lilypond-midi-input`.
+
+If no options are found searching backwards, then currently set options (either form the [plugin config](#at-plugin-initialization), or the [update menu](#using-the-update-menus)) will be restored. If an option has not been specified, its default value will be `nil` (due to how Lua works); you will see an error by the backend saying that `nil` is an invalid value. This error can be ignored, but it also means that the corresponding option cannot be *reset*. If you always want a default fallback option, it is encouraged to specify all relevant option in the [plugin config](#at-plugin-initialization).
 
 ## List of options
 
@@ -205,7 +207,7 @@ debug = 'replace mode'
 - [ ] Create help page? (avialable options? other useful information for on-the-fly look up)
 - [ ] Add `build.lua` for [lazy.nvim][lazy]
 - [x] `MidiInputUpdateOptions` should also change internal values
-- [ ] `% lmi: ` should revert to default options if not found (but do not set if found)
+- [x] `% lmi: ` should revert to default options if not found (but do not set if found)
 - [ ] `% lmi: ` should have a special key to revert to using default options
 
 [lmi]: https://github.com/niveK77pur/lilypond-midi-input

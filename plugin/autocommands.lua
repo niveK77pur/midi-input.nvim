@@ -137,9 +137,28 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
             if debug.enabled('input options') then
                 print(s_row, s_col, e_row, e_col)
                 vim.api.nvim_err_writeln(
-                    'No previous lilypond-midi-input settings found'
+                    string.format(
+                        'No previous lilypond-midi-input settings found. Default settings: accidentals=%s mode=%s alterations=%s global-alterations=%s',
+                        options.get().accidentals,
+                        options.get().mode,
+                        options.parse_alterations(options.get().alterations),
+                        options.parse_alterations(
+                            options.get().global_alterations
+                        )
+                    )
                 )
+                return
             end
+            -- key is managed by another autocommand
+            job:write(
+                string.format(
+                    'accidentals=%s mode=%s alterations=%s global-alterations=%s',
+                    options.get().accidentals,
+                    options.get().mode,
+                    options.get().alterations,
+                    options.get().global_alterations
+                )
+            )
             return
         elseif s_row > e_row or s_col > e_col then
             if debug.enabled('input options') then
