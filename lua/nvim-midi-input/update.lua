@@ -9,11 +9,11 @@ local U = {}
 local function getOptions(arg)
     local choices = {}
     for _, line in
-    ipairs(
-        vim.fn.systemlist(
-            string.format('lilypond-midi-input --list-options %s', arg)
+        ipairs(
+            vim.fn.systemlist(
+                string.format('lilypond-midi-input --list-options %s', arg)
+            )
         )
-    )
     do
         local value = line:match('^([^%s]+)')
         table.insert(choices, value)
