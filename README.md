@@ -204,7 +204,7 @@ debug = 'replace mode'
 - [ ] Completely ignore comments
 - [ ] Create help page? (avialable options? other useful information for on-the-fly look up)
 - [ ] Add `build.lua` for [lazy.nvim][lazy]
-- [ ] `MidiInputUpdateOptions` should also change internal values
+- [x] `MidiInputUpdateOptions` should also change internal values
 - [ ] `% lmi: ` should revert to default options if not found (but do not set if found)
 - [ ] `% lmi: ` should have a special key to revert to using default options
 

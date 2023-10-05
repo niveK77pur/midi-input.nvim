@@ -33,10 +33,12 @@ function U.updateMidiKey(key) --  {{{
             { prompt = 'Chose a musical key' },
             function(choice)
                 job:write(string.format('key=%s', choice))
+                options.set({ key = choice })
             end
         )
     else
         job:write(string.format('key=%s', key))
+        options.set({ key = key })
     end
 end --  }}}
 
@@ -52,10 +54,12 @@ function U.updateMidiAccidentals(accidentals) --  {{{
             { prompt = 'Chose an accidentals style' },
             function(choice)
                 job:write(string.format('accidentals=%s', choice))
+                options.set({ accidentals = choice })
             end
         )
     else
         job:write(string.format('accidentals=%s', accidentals))
+        options.set({ accidentals = accidentals })
     end
 end --  }}}
 
@@ -71,10 +75,12 @@ function U.updateMidiMode(mode) --  {{{
             { prompt = 'Chose a MIDI input mode' },
             function(choice)
                 job:write(string.format('mode=%s', choice))
+                options.set({ mode = choice })
             end
         )
     else
         job:write(string.format('mode=%s', mode))
+        options.set({ mode = mode })
     end
 end --  }}}
 
@@ -88,6 +94,7 @@ function U.updateMidiAlterations(alts) --  {{{
         alts = vim.fn.input('Enter alterations: ')
     end
     job:write(string.format('alterations=%s', options.parse_alterations(alts)))
+    options.set({ alterations = alts })
 end --  }}}
 
 ---Update the global alterations. See `lilypond-midi-input`'s documentation.
@@ -102,6 +109,7 @@ function U.updateMidiGlobalAlterations(galts) --  {{{
     job:write(
         string.format('global-alterations=%s', options.parse_alterations(galts))
     )
+    options.set({ global_alterations = galts })
 end --  }}}
 
 function U.updateReplaceQ(value)
@@ -110,11 +118,13 @@ function U.updateReplaceQ(value)
             { 'yes', 'no' },
             { prompt = 'Should `q` be replaced?' },
             function(choice)
-                options.set({ replace_q = (choice == 'yes'), debug = options.get().debug })
+                options.set({
+                    replace_q = (choice == 'yes'),
+                })
             end
         )
     else
-        options.set({ replace_q = value, debug = options.get().debug })
+        options.set({ replace_q = value })
     end
 end
 
