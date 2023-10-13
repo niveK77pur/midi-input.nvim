@@ -216,6 +216,7 @@ debug = 'replace mode'
 - [x] `MidiInputUpdateOptions` should also change internal values
 - [x] `% lmi: ` should revert to default options if not found (but do not set if found)
 - [x] `% lmi: ` should have a special key to revert to using default options
+- [ ] Appears to sometimes randomly exit job
 
 [lmi]: https://github.com/niveK77pur/lilypond-midi-input
 [lmi-usage]: https://github.com/niveK77pur/lilypond-midi-input#basic-usage
