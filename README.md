@@ -134,7 +134,7 @@ A special first value of `disable` allows *disabling* this modeline-like functio
 
 ## List of options
 
-The name of the device to be used. If set and available, `:MMidiInputStart` will directly launch the backend without asking to select a device.
+The name of the device to be used. If set and available, `:MidiInputStart` will directly launch the backend without asking to select a device.
 
 ```lua
 device = 'USB-MIDI MIDI 1',
