@@ -39,6 +39,8 @@ Once the program and its dependencies are set in place, you can install this plu
 }
 ```
 
+You can run `:checkhealth nvim-midi-input` to see if everything is set up accordingly. (Unfortunately, it cannot check if the [PortMidi library][lmi] is available, so check this if the backend is not working)
+
 # Usage
 
 When the plugin is loaded, you can start the MIDI input using the following command. Note that when `device` was not set as an option, or it is not available, you will be prompted with a [list of available devices][lmi-usage]. You can also append the device name to the command.
@@ -204,7 +206,7 @@ debug = 'replace mode'
 - [x] Remove/Replace prints from development
 - [x] Find previously set key
 - [x] Place config options into the lilypond file at specific points (similar to bar line counting)
-- [ ] Add/Create health checks (backend is installed? Portmidi installed? Necessary options are provided?) `:h health-dev`
+- [x] Add/Create health checks (backend is installed? Portmidi installed? Necessary options are provided?) `:h health-dev`
 - [x] Update option for changing `q` replacement
 - [ ] Option to toggle automatic key setting (previously found key)
 - [ ] Option to toggle automatic config options setting?
