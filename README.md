@@ -24,7 +24,7 @@ The main reason a MIDI handler was not implemented in Lua and thus directly into
     - Stop MIDI input upon closing vim (if forgotten to stop manually with `:MidiInputStop`)
     - Find the previous chord upon entering insert/replace mode (and sets [`previous-chord`][lmi-options])
     - Find the previous key signature upon entering insert/replace mode (and sets [`key`][lmi-options])
-    - Finds arbitrary options in the lilypond source file for [llilypond-midi-input][lmi-options] which are passed as-is to the backend
+    - Finds arbitrary options in the lilypond source file for [lilypond-midi-input][lmi-options] which are passed as-is to the backend
 
 # Installation
 
@@ -50,7 +50,7 @@ When the plugin is loaded, you can start the MIDI input using the following comm
 
 If successful, you can go into *Insert* mode and enter notes using your MIDI keyboard. In *Replace* you can replace existing notes, it will not add or insert notes.
 
-When finished, you can stop the MIDI input using the following command; it will terminate the `lilypond-midi-input` process. In case you forget, an autocommand will also handle this for you.
+When finished, you can stop the MIDI input using the following command; it will terminate the `lilypond-midi-input` process. In case you forget, an autocommand will also handle this for you upon exiting NeoVim.
 
 ```vim
 :MidiInputStop
@@ -108,7 +108,7 @@ Or alternatively in a shorter fashion:
 
 The `:MidiInputUpdateOptions` command should be quite self-explanatory. It uses `vim.ui.select()` to provide the menu, hence any other plugin providing UIs for this function can be used to make it look and function nicer, such as [fzf-lua](https://github.com/ibhagwan/fzf-lua).
 
-A note should be made on the (global) alterations, which will request for user input. Here, you insert the options, just like for the [modeline-like alternative](#vim-modeline-like-settings-in-the-file); i.e. as if you would input them directly into [`lilypond-midi-input`'s stdin][lmi-changing-options] stream. Also see [`lilypond-midi-input`'s options][lmi-options] for available keys and values, there you will also find shorthand notations for quicker input.
+A note should be made on the (global) alterations, which will request for user input. Here, you insert the alterations, just like for the [modeline-like alternative](#vim-modeline-like-settings-in-the-file) (the part after the `=` sign); i.e. as if you would input them directly into [`lilypond-midi-input`'s stdin][lmi-changing-options] stream. Also see [`lilypond-midi-input`'s options][lmi-options] for available keys and values, there you will also find shorthand notations for quicker input.
 
 ## Vim `modeline`-like settings in the file
 
@@ -169,7 +169,7 @@ Specify a key signature for the backend. See [`lilypond-midi-input`'s options ta
 ```lua
 key = 'besM',
 ```
-Specify (global) alterations within an octave the backend. See [`lilypond-midi-input`'s options table][lmi-options].
+Specify (global) alterations within an octave for the backend. See [`lilypond-midi-input`'s options table][lmi-options].
 
 Note that you can also pass in a Lua table instead of a string when defined in the `setup` function. The key must be given as a string, however, due to Lua shenanigans.
 
@@ -181,7 +181,7 @@ alterations = {
 global_alterations = '80:SIKE',
 ```
 
-Debugging this plugin can be done by setting either of the following (they are mutually exclusive, and only 1 can be set). Text input will be disabled, and the corresponding action will be debugged. This includes printing releant information, as well as setting extmarks to see which regions were matched/found when searching backwards by the relevant autocommand.
+Debugging this plugin can be done by setting either of the following (they are mutually exclusive, and only 1 can be set). Text input will be disabled, and the corresponding action will be debugged. This includes printing relevant information, as well as setting extmarks to see which regions were matched/found when searching backwards by the correspondin autocommand.
 
 ```lua
 debug = 'input options'
