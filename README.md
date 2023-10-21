@@ -39,7 +39,7 @@ Once the program and its dependencies are set in place, you can install this plu
 }
 ```
 
-You can run `:checkhealth nvim-midi-input` to see if everything is set up accordingly. (Unfortunately, it cannot check if the [PortMidi library][lmi] is available, so check this if the backend is not working)
+You can run `:checkhealth nvim-midi-input` to see if everything is set up accordingly. (Unfortunately, it cannot check if the [PortMidi library][lmi-install] is available, so check this if the backend is not working)
 
 # Usage
 
@@ -221,6 +221,7 @@ debug = 'replace mode'
 - [ ] Appears to sometimes randomly exit job
 
 [lmi]: https://github.com/niveK77pur/lilypond-midi-input
+[lmi-install]: https://github.com/niveK77pur/lilypond-midi-input#installation
 [lmi-usage]: https://github.com/niveK77pur/lilypond-midi-input#basic-usage
 [lmi-features]: https://github.com/niveK77pur/lilypond-midi-input#features
 [lmi-changing-options]: https://github.com/niveK77pur/lilypond-midi-input#changing-options
