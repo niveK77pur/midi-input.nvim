@@ -295,6 +295,7 @@ debug = 'replace mode'
 - [x] Update option for changing `q` replacement
 - [ ] Option to toggle automatic key setting (previously found key)
 - [ ] Option to toggle automatic config options setting?
+- [ ] Option to automatically reset options when reading a new `% lmi: ` (avoids an explicit `% lmi: disable`)
 - [x] Refactor debugging
 - [x] Do not replace within comments
 - [ ] Completely ignore comments
