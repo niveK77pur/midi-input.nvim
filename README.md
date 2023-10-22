@@ -11,20 +11,71 @@ The main reason a MIDI handler was not implemented in Lua and thus directly into
     - Notes are only inserted when in *Insert mode*
     - Notes are replaced when in *Replace mode*
     - Nothing will happen in any other mode
-- Always puts cursor right after inserted/replaced note for quick editing (i.e. add articulations, etc.)
-- Puts appropriate spacing around inserted notes
+    - <details><summary>Open to view demo</summary>
+
+        TODO: Demo screencast showing how it works in the various modes
+
+      </details>
+- <details><summary>Always puts cursor right after inserted/replaced note for quick editing (i.e. add articulations, etc.)</summary>
+
+    TODO: Demo showing cursor after note to insert dynamics, etc
+
+  </details>
+- <details><summary>Puts appropriate spacing around inserted notes</summary>
+
+    Shows inserting note when cursor is located
+    - right **after** a character
+    - right **before** a character
+    - **inside** a word
+    - already surrounded by spaces
+
+  </details>
 - Options to change behaviour
     - See all [options from lilypond-midi-input][lmi-options]
     - (Global) alterations can be given as lua tables in the config
-    - `replace_q` on whether to replace a [`q`](https://lilypond.org/doc/v2.24/Documentation/learning/combining-notes-into-chords). If disabled, behaves like [Frescobaldi][frescobaldi]'s replace.
+    - <details><summary><code>replace_q</code> on whether to replace a <a href="https://lilypond.org/doc/v2.24/Documentation/learning/combining-notes-into-chords"><code>q</code></a>. If disabled, behaves like <a href="https://frescobaldi.org/">Frescobaldi</a>'s replace.</summary>
+
+        TODO: Demo video
+
+      </details>
     - `debug` for debugging issues or undesired behaviour; will disable note input
-- List of MIDI devices to select from when none is specified, or when the specified one is not available
-- Comprehensive update menu for discoverable options (`:MidiInputUpdateOptions`)
+- <details><summary>List of MIDI devices to select from when none is specified, or when the specified one is not available</summary>
+
+    Show video selecting midi device
+
+  </details>
+- <details><summary>Comprehensive update menu for discoverable options (<code>:MidiInputUpdateOptions</code>)</summary>
+
+    TODO: show menu for key signature and modes
+
+  </details>
 - Autocommands to make for a more seamless experience
     - Stop MIDI input upon closing vim (if forgotten to stop manually with `:MidiInputStop`)
-    - Find the previous chord upon entering insert/replace mode (and sets [`previous-chord`][lmi-options])
-    - Find the previous key signature upon entering insert/replace mode (and sets [`key`][lmi-options])
-    - Finds arbitrary options in the lilypond source file for [lilypond-midi-input][lmi-options] which are passed as-is to the backend
+    - <details><summary>Find the previous chord upon entering insert/replace mode (and sets <a href="https://github.com/niveK77pur/lilypond-midi-input#options"><code>previous-chord</code></a>)</summary>
+
+        - Shows entering chords (on multiple lines)
+        - Shows a repeated chord inserts `q`
+        - Shows the same chord won't be inserted as `q` if it is not also the previous chord
+        - Shows repeating the previous chord at cursor position being inserted as `q`
+        - Shows repeating the previous chord between chords in the same line
+
+      </details>
+    - <details>Find the previous key signature upon entering insert/replace mode (and sets <a href="https://github.com/niveK77pur/lilypond-midi-input#options">`key`</a>)</summary>
+
+        Shows notes being inserted
+        - after a `\key b \major`
+        - after a `\key ces \major`
+        - after going back to the `\key b \major`
+
+    </details>
+    - <details><summary>Finds arbitrary options in the lilypond source file for <a href="https://github.com/niveK77pur/lilypond-midi-input#options">lilypond-midi-input</a> which are passed as-is to the backend</summary>
+
+        Shows inserting notes:
+        - after accidentals were set to sharps
+        - after accidentals were set to flats
+        - after going back to where they were set as sharps
+
+      </details>
 
 # Installation
 
