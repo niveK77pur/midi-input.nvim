@@ -60,14 +60,14 @@ The main reason a MIDI handler was not implemented in Lua and thus directly into
         - Shows repeating the previous chord between chords in the same line
 
       </details>
-    - <details>Find the previous key signature upon entering insert/replace mode (and sets <a href="https://github.com/niveK77pur/lilypond-midi-input#options">`key`</a>)</summary>
+    - <details><summary>Find the previous key signature upon entering insert/replace mode (and sets <a href="https://github.com/niveK77pur/lilypond-midi-input#options">`key`</a>)</summary>
 
         Shows notes being inserted
         - after a `\key b \major`
         - after a `\key ces \major`
         - after going back to the `\key b \major`
 
-    </details>
+      </details>
     - <details><summary>Finds arbitrary options in the lilypond source file for <a href="https://github.com/niveK77pur/lilypond-midi-input#options">lilypond-midi-input</a> which are passed as-is to the backend</summary>
 
         Shows inserting notes:
