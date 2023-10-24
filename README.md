@@ -1,3 +1,17 @@
+<!--toc:start-->
+- [About](#about)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Options](#options)
+  - [At plugin initialization](#at-plugin-initialization)
+  - [Using the update menus](#using-the-update-menus)
+  - [Vim `modeline`-like settings in the file](#vim-modeline-like-settings-in-the-file)
+  - [List of options](#list-of-options)
+- [See also](#see-also)
+- [TODO](#todo)
+<!--toc:end-->
+
 # About
 
 This NeoVim plugin is effectively a wrapper — albeit a pretty advanced one — around [lilypond-midi-input][lmi], inspired by how [Frescobaldi][frescobaldi] and [Denemo][denemo] handle MIDI input. The main goal is to allow using a MIDI keyboard to insert notes into your lilypond scores.
