@@ -12,13 +12,23 @@ The main reason a MIDI handler was not implemented in Lua and thus directly into
     - Notes are replaced when in *Replace mode*
     - Nothing will happen in any other mode
     - <details><summary>Open to view demo</summary>
+ 
+        Screencast shows
+        - Notes in normal mode are ignored
+        - Notes are inserted in insert mode
+        - More notes in normal mode being ignored
+        - Replace mode where existing notes are exchanged with new ones
+        - Last batch of notes being ignored in normal mode
 
-        TODO: Demo screencast showing how it works in the various modes
+        https://github.com/niveK77pur/midi-input.nvim/assets/10981161/838cabf8-09e8-48ea-82fb-561ef3523386
 
       </details>
 - <details><summary>Always puts cursor right after inserted/replaced note for quick editing (i.e. add articulations, etc.)</summary>
 
-    TODO: Demo showing cursor after note to insert dynamics, etc
+    - Shows inserting notes and how cursor is always placed right after insertion
+    - Shows taking advantage of cursor's placement to add articulations and fingerings to notes
+
+    https://github.com/niveK77pur/midi-input.nvim/assets/10981161/2b92ed0d-50f9-4f41-9e11-0b4d35f655e5
 
   </details>
 - <details><summary>Puts appropriate spacing around inserted notes</summary>
@@ -29,51 +39,73 @@ The main reason a MIDI handler was not implemented in Lua and thus directly into
     - **inside** a word
     - already surrounded by spaces
 
+    https://github.com/niveK77pur/midi-input.nvim/assets/10981161/fcebad49-6b83-42fd-86bf-1a39d100e95f
+
   </details>
 - Options to change behaviour
     - See all [options from lilypond-midi-input][lmi-options]
     - (Global) alterations can be given as lua tables in the config
     - <details><summary><code>replace_q</code> on whether to replace a <a href="https://lilypond.org/doc/v2.24/Documentation/learning/combining-notes-into-chords"><code>q</code></a>. If disabled, behaves like <a href="https://frescobaldi.org/">Frescobaldi</a>'s replace.</summary>
 
-        TODO: Demo video
+      Shows the following:
+      - Inserting notes and repeated chords (inserted as `q`)
+      - Replacing notes with setting turned off: `q`s are being skipped
+      - Replacing with setting turned on: `q`s can be replaced
+
+      https://github.com/niveK77pur/midi-input.nvim/assets/10981161/9807a0bd-213c-4158-95b2-2fc7e61216f5
 
       </details>
     - `debug` for debugging issues or undesired behaviour; will disable note input
 - <details><summary>List of MIDI devices to select from when none is specified, or when the specified one is not available</summary>
 
-    Show video selecting midi device
+    https://github.com/niveK77pur/midi-input.nvim/assets/10981161/f5674ada-123c-4129-aea4-3338893d6718
 
   </details>
 - <details><summary>Comprehensive update menu for discoverable options (<code>:MidiInputUpdateOptions</code>)</summary>
 
-    TODO: show menu for key signature and modes
+    Shows the following actions:
+    - Setting the key signature to B major
+    - Changing the input mode to `Chord` for inserting chords
+    - Changing the key signature to D major
+    - Changing accidentals to insert flats for out of key black notes
+
+    https://github.com/niveK77pur/midi-input.nvim/assets/10981161/e13e11e5-39d2-4d11-a850-4f5e9ea1dba9
 
   </details>
 - Autocommands to make for a more seamless experience
     - Stop MIDI input upon closing vim (if forgotten to stop manually with `:MidiInputStop`)
     - <details><summary>Find the previous chord upon entering insert/replace mode (and sets <a href="https://github.com/niveK77pur/lilypond-midi-input#options"><code>previous-chord</code></a>)</summary>
 
-        - Shows entering chords (on multiple lines)
-        - Shows a repeated chord inserts `q`
-        - Shows the same chord won't be inserted as `q` if it is not also the previous chord
-        - Shows repeating the previous chord at cursor position being inserted as `q`
-        - Shows repeating the previous chord between chords in the same line
+        Shows the following
+        - Entering chords (on multiple lines)
+        - A repeated chord inserts `q`
+        - The same chord won't be inserted as `q` if it is not also the previous chord
+        - Repeating the previous chord at cursor position being inserted as `q`
+        - Repeating the previous chord between chords in the same line inserts `q`
+        - Searching previous chord is not restricted to the current line
+
+        https://github.com/niveK77pur/midi-input.nvim/assets/10981161/8a0baa43-c97a-4efb-9a90-91e740e80368
 
       </details>
-    - <details><summary>Find the previous key signature upon entering insert/replace mode (and sets <a href="https://github.com/niveK77pur/lilypond-midi-input#options">`key`</a>)</summary>
+    - <details><summary>Find the previous key signature upon entering insert/replace mode (and sets <a href="https://github.com/niveK77pur/lilypond-midi-input#options"><code>key</code></a>)</summary>
 
         Shows notes being inserted
-        - after a `\key b \major`
-        - after a `\key ces \major`
-        - after going back to the `\key b \major`
+        - after a `\key b \major` (note the black keys as sharps)
+        - after a `\key ces \major` (note the black keys as flats)
+        - after going back to the `\key b \major` (sharps again)
+        - after going back to the `\key ces \major` (flats again)
+
+        https://github.com/niveK77pur/midi-input.nvim/assets/10981161/0c6c7ffc-a0f1-4871-8b04-dd94066d6989
 
       </details>
     - <details><summary>Finds arbitrary options in the lilypond source file for <a href="https://github.com/niveK77pur/lilypond-midi-input#options">lilypond-midi-input</a> which are passed as-is to the backend</summary>
 
         Shows inserting notes:
-        - after accidentals were set to sharps
         - after accidentals were set to flats
-        - after going back to where they were set as sharps
+        - after accidentals were set to sharps
+        - after going back to where they were set as flats
+
+        https://github.com/niveK77pur/midi-input.nvim/assets/10981161/3c845ef3-cb83-4721-a0cc-015d5f99b29d
 
       </details>
 
