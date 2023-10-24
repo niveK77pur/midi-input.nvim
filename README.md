@@ -277,6 +277,10 @@ debug = 'previous chord'
 debug = 'replace mode'
 ```
 
+# See also
+
+- NeoVim plugin written in Python with `rtmidi` dependency: <https://github.com/ripxorip/midi.nvim>
+
 # TODO
 
 - [x] Plugin options are not taken into account
