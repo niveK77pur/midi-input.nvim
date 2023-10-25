@@ -68,6 +68,20 @@ Bullet points with an arrow right after can be clicked on and expanded to show a
 
 == Installation
 
+The {url-lmi}[lilypond-midi-input] must be available in the `PATH`. Please see its {url-lmi-install}[installation instructions].
+
+Once the program and its dependencies are set in place, you can install this plugin with the following using {url-lazy}[lazy.nvim], for example. Note that no options/configurations are required.
+
+[,lua]
+----
+{
+    'niveK77pur/midi-input.nvim',
+    ft = { 'lilypond' },
+}
+----
+
+You can run `:checkhealth nvim-midi-input` to see if everything is set up accordingly. (Unfortunately, it cannot check if the {url-lmi-install}[PortMidi library] is available, so check this if the backend is not working)
+
 == Usage
 
 == Options
