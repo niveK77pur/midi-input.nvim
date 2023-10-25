@@ -101,13 +101,14 @@ When finished, you can stop the MIDI input using the following command; it will 
 :MidiInputStop
 ----
 
-You can manually change options with the following command. A sequence of menus will be shown to guide you towards the option you are willing to change and its values. See also the <<_options, options section>> below.
+You can manually change options with the following command. A sequence of menus will be shown to guide you towards the option you are willing to change and its values. See also the <<options, options section>> below.
 
 [,viml]
 ----
 :MidiInputUpdateOptions
 ----
 
+[#options]
 == Options
 
 === At plugin initialization
