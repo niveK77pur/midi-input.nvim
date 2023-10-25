@@ -13,9 +13,8 @@
 :videoicon: 󰍫
 :videoattr: width=100%, opts=autoplay
 
-= Async and Modal MIDI Input in NeoVim
-
 :toc:
+= Async and Modal MIDI Input in NeoVim
 
 == About
 
