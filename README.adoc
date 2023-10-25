@@ -1,3 +1,6 @@
+// :source-highlighter: highlight.js
+:source-highlighter: rouge
+
 :url-lmi: https://github.com/niveK77pur/lilypond-midi-input
 :url-lmi-install: https://github.com/niveK77pur/lilypond-midi-input#installation
 :url-lmi-usage: https://github.com/niveK77pur/lilypond-midi-input#basic-usage
