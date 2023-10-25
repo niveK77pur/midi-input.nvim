@@ -13,7 +13,7 @@
 :url-vim-modes: https://neovim.io/doc/user/intro.html#vim-modes
 :url-lilypond-chords: https://lilypond.org/doc/v2.24/Documentation/learning/combining-notes-into-chords
 
-:videoicon: 󰍫
+:videoicon: 🎬
 :videoattr: width=100%, opts=autoplay
 
 :toc:
