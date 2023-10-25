@@ -287,4 +287,7 @@ debug = 'replace mode'
 
 == See also
 
+* NeoVim plugin written in Python with `rtmidi` dependency: <https://github.com/ripxorip/midi.nvim>
+* A proper CLI midi player: <https://gitlab.com/dajoha/midiplay>
+
 == TODO
