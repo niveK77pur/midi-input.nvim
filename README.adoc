@@ -84,6 +84,30 @@ You can run `:checkhealth nvim-midi-input` to see if everything is set up accord
 
 == Usage
 
+When the plugin is loaded, you can start the MIDI input using the following command. Note that when `device` was not set as an option, or it is not available, you will be prompted with a {url-lmi-usage}[list of available devices]. You can also append the device name to the command.
+
+[,viml]
+----
+:MidiInputStart
+:MidiInputStart my-midi-device
+----
+
+If successful, you can go into *Insert* mode and enter notes using your MIDI keyboard. In *Replace* you can _replace_ existing notes, it will not add or insert notes.
+
+When finished, you can stop the MIDI input using the following command; it will terminate the `lilypond-midi-input` process. In case you forget, an autocommand will also handle this for you upon exiting NeoVim.
+
+[,viml]
+----
+:MidiInputStop
+----
+
+You can manually change options with the following command. A sequence of menus will be shown to guide you towards the option you are willing to change and its values. See also the <<_options, options section>> below.
+
+[,viml]
+----
+:MidiInputUpdateOptions
+----
+
 == Options
 
 === At plugin initialization
