@@ -294,3 +294,30 @@ debug = 'replace mode'
 * A proper CLI midi player: <https://gitlab.com/dajoha/midiplay>
 
 == TODO
+
+* [x] Plugin options are not taken into account
+* [x] MIDI start does not check if already running (creates an orphaned process)
+* [x] Pedal modes do not seem to work?
+* [x] Starting replacement inside ~~chord~~ last note causes error
+* [x] Replacement inside last chord before closing bracket `}` does not work (no error though)
+* [x] Find last chord and tell it to the backend (allows improved addition of `q`)
+* [x] Add debug option to highlight start and end of found regions (replace, find last note/chord, etc)
+* [ ] Repeated notes could insert duration as shorthand (similar to `q`)
+* [x] Option to have pass:q[`q`]s be replaced as well
+* [x] Remove/Replace prints from development
+* [x] Find previously set key
+* [x] Place config options into the lilypond file at specific points (similar to bar line counting)
+* [x] Add/Create health checks (backend is installed? Portmidi installed? Necessary options are provided?) `:h health-dev`
+* [x] Update option for changing `q` replacement
+* [ ] Option to toggle automatic key setting (previously found key)
+* [ ] Option to toggle automatic config options setting?
+* [ ] Option to automatically reset options when reading a new `pass:q[% lmi: ]` (avoids an explicit `% lmi: disable`)
+* [x] Refactor debugging
+* [x] Do not replace within comments
+* [ ] Completely ignore comments, i.e. pretend commented regions do not exist (for searching)
+* [ ] Create help page? (avialable options? other useful information for on-the-fly look up)
+* [ ] Add `build.lua` to install backend? (for {url-lazy}[lazy.nvim])
+* [x] `MidiInputUpdateOptions` should also change internal values
+* [x] `% lmi: ` should revert to default options if not found (but do not set if found)
+* [x] `% lmi: ` should have a special key to revert to using default options
+* [ ] Appears to sometimes randomly exit job
