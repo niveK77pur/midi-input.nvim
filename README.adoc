@@ -111,13 +111,179 @@ You can manually change options with the following command. A sequence of menus 
 [#options]
 == Options
 
+There are three ways to set options for the plugin and the {url-lmi}[`lilypond-midi-input`] backend. For a list of all available options, see the <<list-of-options>> further down.
+
+[#plugin-init]
 === At plugin initialization
 
+A `setup` function is provided to initialize the plugin with user defined values. The setup function does only that, set initial values, nothing else.
+
+[NOTE]
+These options will only be set once during initialization; the other methods will overwrite these values.
+
+[,lua]
+----
+require('nvim-midi-input').setup({
+    device = 'My device name',
+})
+----
+
+====
+In the case of {url-lazy}[lazy.nvim] you can therefore set the options either using the `config` or `opts` field; both will yield identical results.
+
+[,lua]
+----
+{
+    'niveK77pur/midi-input.nvim',
+    ft = { 'lilypond' },
+    config = function()
+        require('nvim-midi-input').setup({
+            device = 'My device name',
+        })
+    end,
+}
+----
+
+Or alternatively in a shorter fashion:
+
+[,lua]
+----
+{
+    'niveK77pur/midi-input.nvim',
+    ft = { 'lilypond' },
+    opts = {
+        device = 'My device name',
+    },
+}
+----
+====
+
+[#update-menus]
 === Using the update menus
 
-=== Vim `modeline`-like settings in he file
+The `:MidiInputUpdateOptions` command should be quite self-explanatory. It uses `vim.ui.select()` to provide the menu, hence any other plugin providing UIs for this function can be used to make it look and function nicer, such as https://github.com/ibhagwan/fzf-lua[fzf-lua].
 
+A note should be made on the (global) alterations, which will request for user input. Here, you insert the alterations, just like for the <<modeline-settings, modeline-like alternative>> (the part after the `alt=` and `galt=`); i.e. as if you would input them directly into {url-lmi-changing-options}[pass:q[`lilypond-midi-input`]'s stdin] stream. See also {url-lmi-options}[pass:q[`lilypond-midi-input`]'s options] for available keys and values, there you will also find shorthand notations for quicker input.
+
+[#modeline-settings]
+=== Vim `modeline`-like settings in the file
+
+Anywhere in the lilypond file, you can add the following comment to set options that will be set in `lilypond-midi-input`.
+
+[,lilypond]
+----
+% lmi: accidentals=Flats
+<some music> % lmi: a=f
+----
+
+[IMPORTANT]
+You MUST have a `%` comment character, followed by one or more spaces, followed by exactly `lmi:`, followed by one or more spaces, and the desired options. The options will be provided *as-is* to pass:q[`lilypond-midi-input`]'s stdin stream. This also means that anything following `pass:[% lmi: ]` will be passed to the backend, regardless of its content; no sanitizing or filtering is performed.
+
+An autocommand will search backwards from the current cursor position for such comments, upon entering insert mode. If options are found, they will be sent and thus set in `lilypond-midi-input`.
+If no options are found searching backwards, then the currently or last set options (either form the <<plugin-init, plugin config>>, or the <<update-menus, update menu>>) will be restored.
+
+[WARNING]
+If an option has not been specified, its default value will be `nil` (due to how Lua works); you will see an error by the backend saying that `nil` is an invalid value. This error can be ignored, but it also means that the corresponding option *cannot be reset*. If you always want a default fallback value, it is encouraged to specify all relevant options in the <<plugin-init, plugin config>>.
+
+A special first value of `disable` allows _disabling_ this modeline-like functionality and explicitly using the previous config values (same as those if no options were found). Anything after this point will behave as if no `pass:[% lmi: ]` options were ever given.
+
+[,lilypond]
+----
+% lmi: disable
+% lmi: disable these options here will be ignored
+----
+
+[NOTE]
+The `disable` value MUST be the first value among the provided options; any following options will of course be ignored then.
+
+[#list-of-options]
 === List of options
+
+Many options actually correspond to the backend {url-lmi}[lilypond-midi-input], so to avoid duplicate documentation you will often find references to the {url-lmi-options}[options table] there.
+
+[NOTE]
+The options here are presented as if you were to put them into the <<plugin-init, plugin config>>.
+
+==== MIDI input `device`
+
+The name of the device to be used. If set and available, `:MidiInputStart` will directly launch the backend without asking to select a device.
+
+[,lua]
+----
+device = 'USB-MIDI MIDI 1'
+----
+
+==== MIDI input `mode`
+
+Set the input mode for the backend. See {url-lmi-options}[pass:q[`lilypond-midi-input`]'s options table].
+
+[,lua]
+----
+mode = 'pedal-chord'
+----
+
+==== Whether to `replace_q`
+
+Whether a `q` should be replaced in *Replace* mode. A value of `false` will make it behave like {url-lmi}[Frescobaldi]'s replacement mode. Default is `true`.
+
+[,lua]
+----
+replace_q = true
+----
+
+==== Should notes `replace_in_comment`
+
+Currently, the plugin has a very rudimentary and not fully functional way to detect comments. This option allows notes to be replaced within a comment. Default is `false`.
+
+[,lua]
+----
+replace_in_comment = false
+----
+
+==== Sharp or flat `accidental`
+
+How to handle out-of-key accidental notes by the backend. See {url-lmi-options}[pass:q[`lilypond-midi-input`]'s options table].
+
+[,lua]
+----
+accidentals = 'flats'
+----
+
+==== Which `key` are we in
+
+Specify a key signature for the backend. See {url-lmi-options}[pass:q[`lilypond-midi-input`]'s options table].
+
+[,lua]
+----
+key = 'besM'
+----
+
+==== Custom (global) `alterations`
+
+Specify (global) alterations within an octave for the backend. See {url-lmi-options}[pass:q[`lilypond-midi-input`]'s options table].
+
+Note that you can also pass in a Lua table instead of a string when defined in the `setup` function. The key must be given as a string, however, due to Lua shenanigans.
+
+[,lua]
+----
+alterations = {
+    ['0'] = 'YO',
+    ['4'] = 'BYE',
+}
+global_alterations = '80:SIKE',
+----
+
+==== We need to `debug`
+
+Debugging this plugin can be done by setting either of the following (they are mutually exclusive, so only one of them can be set). MIDI note input will be disabled, and the corresponding action will be debugged. This includes printing relevant information, as well as setting extmarks to see which regions were matched/found when searching backwards by the corresponding autocommand.
+
+[,lua]
+----
+debug = 'input options'
+debug = 'key signature'
+debug = 'previous chord'
+debug = 'replace mode'
+----
 
 == See also
 
