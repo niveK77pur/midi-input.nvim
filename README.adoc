@@ -239,7 +239,7 @@ You can manually change options with the following command. A sequence of menus 
 
 There are three ways to set options for the plugin and the {url-lmi}[`lilypond-midi-input`] backend. For a list of all available options, see the <<list-of-options>> further down.
 
-[#plugin-init]
+[#at-plugin-initialization]
 === At plugin initialization
 
 A `setup` function is provided to initialize the plugin with user defined values. The setup function does only that, set initial values, nothing else.
@@ -284,14 +284,14 @@ Or alternatively in a shorter fashion:
 ----
 ====
 
-[#update-menus]
+[#using-the-update-menus]
 === Using the update menus
 
 The `:MidiInputUpdateOptions` command should be quite self-explanatory. It uses `vim.ui.select()` to provide the menu, hence any other plugin providing UIs for this function can be used to make it look and function nicer, such as https://github.com/ibhagwan/fzf-lua[fzf-lua].
 
-A note should be made on the (global) alterations, which will request for user input. Here, you insert the alterations, just like for the <<modeline-settings, modeline-like alternative>> (the part after the `alt=` and `galt=`); i.e. as if you would input them directly into {url-lmi-changing-options}[pass:q[`lilypond-midi-input`]'s stdin] stream. See also {url-lmi-options}[pass:q[`lilypond-midi-input`]'s options] for available keys and values, there you will also find shorthand notations for quicker input.
+A note should be made on the (global) alterations, which will request for user input. Here, you insert the alterations, just like for the <<vim-modeline-like-settings-in-the-file, modeline-like alternative>> (the part after the `alt=` and `galt=`); i.e. as if you would input them directly into {url-lmi-changing-options}[pass:q[`lilypond-midi-input`]'s stdin] stream. See also {url-lmi-options}[pass:q[`lilypond-midi-input`]'s options] for available keys and values, there you will also find shorthand notations for quicker input.
 
-[#modeline-settings]
+[#vim-modeline-like-settings-in-the-file]
 === Vim `modeline`-like settings in the file
 
 Anywhere in the lilypond file, you can add the following comment to set options that will be set in `lilypond-midi-input`.
@@ -306,10 +306,10 @@ Anywhere in the lilypond file, you can add the following comment to set options 
 You MUST have a `%` comment character, followed by one or more spaces, followed by exactly `lmi:`, followed by one or more spaces, and the desired options. The options will be provided *as-is* to pass:q[`lilypond-midi-input`]'s stdin stream. This also means that anything following `pass:[% lmi: ]` will be passed to the backend, regardless of its content; no sanitizing or filtering is performed.
 
 An autocommand will search backwards from the current cursor position for such comments, upon entering insert mode. If options are found, they will be sent and thus set in `lilypond-midi-input`.
-If no options are found searching backwards, then the currently or last set options (either form the <<plugin-init, plugin config>>, or the <<update-menus, update menu>>) will be restored.
+If no options are found searching backwards, then the currently or last set options (either form the <<at-plugin-initialization, plugin config>>, or the <<using-the-update-menus, update menu>>) will be restored.
 
 [WARNING]
-If an option has not been specified, its default value will be `nil` (due to how Lua works); you will see an error by the backend saying that `nil` is an invalid value. This error can be ignored, but it also means that the corresponding option *cannot be reset*. If you always want a default fallback value, it is encouraged to specify all relevant options in the <<plugin-init, plugin config>>.
+If an option has not been specified, its default value will be `nil` (due to how Lua works); you will see an error by the backend saying that `nil` is an invalid value. This error can be ignored, but it also means that the corresponding option *cannot be reset*. If you always want a default fallback value, it is encouraged to specify all relevant options in the <<at-plugin-initialization, plugin config>>.
 
 A special first value of `disable` allows _disabling_ this modeline-like functionality and explicitly using the previous config values (same as those if no options were found). Anything after this point will behave as if no `pass:[% lmi: ]` options were ever given.
 
@@ -328,7 +328,7 @@ The `disable` value MUST be the first value among the provided options; any foll
 Many options actually correspond to the backend {url-lmi}[lilypond-midi-input], so to avoid duplicate documentation you will often find references to the {url-lmi-options}[options table] there.
 
 [NOTE]
-The options here are presented as if you were to put them into the <<plugin-init, plugin config>>.
+The options here are presented as if you were to put them into the <<at-plugin-initialization, plugin config>>.
 
 ==== MIDI input `device`
 
