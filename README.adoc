@@ -1,0 +1,83 @@
+:url-lmi: https://github.com/niveK77pur/lilypond-midi-input
+:url-lmi-install: https://github.com/niveK77pur/lilypond-midi-input#installation
+:url-lmi-usage: https://github.com/niveK77pur/lilypond-midi-input#basic-usage
+:url-lmi-features: https://github.com/niveK77pur/lilypond-midi-input#features
+:url-lmi-changing-options: https://github.com/niveK77pur/lilypond-midi-input#changing-options
+:url-lmi-options: https://github.com/niveK77pur/lilypond-midi-input#options
+:url-frescobaldi: https://frescobaldi.org/
+:url-denemo: https://denemo.org/
+:url-lazy: https://github.com/folke/lazy.nvim
+:url-vim-modes: https://neovim.io/doc/user/intro.html#vim-modes
+:url-lilypond-chords: https://lilypond.org/doc/v2.24/Documentation/learning/combining-notes-into-chords
+
+:videoicon: 󰍫
+:videoattr: width=100%, opts=autoplay
+
+= Async and Modal MIDI Input in NeoVim
+
+:toc:
+
+== About
+
+This NeoVim plugin is effectively a wrapper -- albeit a pretty advanced one -- around {url-lmi}[lilypond-midi-input], inspired by how {url-frescobaldi}[Frescobaldi] and {url-denemo}[Denemo] handle MIDI input. The main goal is to allow using a MIDI keyboard to insert notes into your lilypond scores.
+
+The main reason a MIDI handler was not implemented in Lua and thus directly into NeoVim, is because of a seeming lack of comprehensive libraries. There are a few MIDI related libraries, but by their descriptions they only appear to work on MIDI files, not real-time MIDI input from a device. (Also it was a good excuse for me to use Rust again, and the resulting backend could in theory be used outside NeoVim)
+
+== Features
+
+[NOTE]
+Bullet points with an arrow right after can be clicked on and expanded to show a *demo video*!
+
+
+* All features from {url-lmi-features}[lilypond-midi-input], reflected during inserting/replacing of notes
+
+
+* Respects vim modes (see {url-vim-modes}[`:h vim-modes`])
+
+** Notes are only inserted when in *Insert mode*
+** Notes are replaced when in *Replace mode*
+** Nothing will happen in any other mode
+** Open to view demo
+
+* Always puts cursor right after inserted/replaced note for quick editing (i.e. add articulations, etc.)
+
+
+* Puts appropriate spacing around inserted notes
+
+
+* Options to change behaviour
+** See all {url-lmi-options}[options from lilypond-midi-input]
+** (Global) alterations can be given as lua tables in the config
+** `replace_q` on whether to replace a {url-lilypond-chords}[`q`]. If disabled, behaves like {url-frescobaldi}[Frescobaldi]'s replace.
+** `debug` for debugging issues or undesired behaviour; will disable note input
+
+
+* List of MIDI devices to select from when none is specified, or when the specified one is not available
+
+
+* Comprehensive update menu for discoverable options (`:MidiInputUpdateOptions`)
+
+
+* Autocommands to make for a more seamless experience
+** Stop MIDI input upon closing vim (if forgotten to stop manually with `:MidiInputStop`)
+** Find the previous chord upon entering insert/replace mode (and sets {url-lmi-options}[`previous-chord`])
+** Find the previous key signature upon entering insert/replace mode (and sets {url-lmi-options}[`key`])
+** Finds arbitrary options in the lilypond source file for {url-lmi-options}[lilypond-midi-input] which are passed as-is to the backend
+
+== Installation
+
+== Usage
+
+== Options
+
+=== At plugin initialization
+
+=== Using the update menus
+
+=== Vim `modeline`-like settings in he file
+
+=== List of options
+
+== See also
+
+== TODO
