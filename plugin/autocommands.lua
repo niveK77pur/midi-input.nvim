@@ -5,7 +5,7 @@ local options = require('nvim-midi-input.options')
 local augroup_midideviceinput =
     vim.api.nvim_create_augroup('midideviceinput', {})
 
-vim.api.nvim_create_autocmd({ 'ExitPre', 'QuitPre' }, {
+vim.api.nvim_create_autocmd({ 'ExitPre', 'VimLeavePre' }, {
     group = augroup_midideviceinput,
     pattern = { '*' },
     desc = 'Quit the MIDI Input Listener',
