@@ -388,7 +388,7 @@ key = 'besM'
 
 Specify (global) alterations within an octave for the backend. See {url-lmi-options}[pass:q[`lilypond-midi-input`]'s options table].
 
-Note that you can also pass in a Lua table instead of a string when defined in the `setup` function. The key must be given as a string, however, due to Lua shenanigans.
+NOTE: You can also pass in a Lua table instead of a string when defined in the `setup` function. The key must be given as a string, however, due to Lua shenanigans.
 
 [,lua]
 ----
