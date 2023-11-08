@@ -1,7 +1,7 @@
 local M = {}
 local opts = require('nvim-midi-input.options')
 
-function checkExecutable()
+local function checkExecutable()
     vim.health.report_start('External dependency')
     if vim.fn.executable('lilypond-midi-input') == 1 then
         vim.health.report_ok(
@@ -17,7 +17,7 @@ function checkExecutable()
     end
 end
 
-function checkDevice()
+local function checkDevice()
     vim.health.report_start('Default MIDI device')
     if opts.get().device then
         vim.health.report_ok('Default MIDI device is set')
@@ -29,7 +29,7 @@ function checkDevice()
     end
 end
 
-function checkDebug()
+local function checkDebug()
     vim.health.report_start('Debugging')
     local debug = opts.get().debug
     local debug_values = {
@@ -60,7 +60,7 @@ function checkDebug()
     )
 end
 
-function checkOptions()
+local function checkOptions()
     vim.health.report_start('Plugin options')
     local options = {
         { 'device', opts.get().device },
@@ -74,7 +74,7 @@ function checkOptions()
     }
     local final_warning = false
     for _, option in ipairs(options) do
-        key, value = option[1], option[2]
+        local key, value = option[1], option[2]
         if value == nil and value ~= false then
             final_warning = true
             vim.health.report_warn(
