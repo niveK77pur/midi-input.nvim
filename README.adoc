@@ -385,7 +385,7 @@ accidentals = 'flats'
 
 ==== Which `key` are we in
 
-Specify a key signature for the backend. See {url-lmi-options-key}[pass:q[`lilypond-midi-input`]'s options table].
+Specify a key signature for the backend. See {url-lmi-options-key}[pass:q[`lilypond-midi-input`]'s options table]. Default is `cM`.
 
 [,lua]
 ----
