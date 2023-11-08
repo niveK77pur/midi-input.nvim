@@ -374,7 +374,7 @@ Currently, the plugin has a very rudimentary and not fully functional way to det
 replace_in_comment = false
 ----
 
-==== Sharp or flat `accidental`
+==== Sharp or flat `accidentals`
 
 How to handle out-of-key accidental notes by the backend. See {url-lmi-options-accidentals}[pass:q[`lilypond-midi-input`]'s options table].
 
