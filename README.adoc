@@ -7,6 +7,11 @@
 :url-lmi-features: https://github.com/niveK77pur/lilypond-midi-input#features
 :url-lmi-changing-options: https://github.com/niveK77pur/lilypond-midi-input#changing-options
 :url-lmi-options: https://github.com/niveK77pur/lilypond-midi-input#options
+:url-lmi-options-mode: https://github.com/niveK77pur/lilypond-midi-input#options-mode
+:url-lmi-options-accidentals: https://github.com/niveK77pur/lilypond-midi-input#options-accidentals
+:url-lmi-options-key: https://github.com/niveK77pur/lilypond-midi-input#options-key
+:url-lmi-options-alterations: https://github.com/niveK77pur/lilypond-midi-input#options-alterations
+:url-lmi-options-global-alterations: https://github.com/niveK77pur/lilypond-midi-input#options-global-alterations
 :url-frescobaldi: https://frescobaldi.org/
 :url-denemo: https://denemo.org/
 :url-lazy: https://github.com/folke/lazy.nvim
@@ -332,7 +337,7 @@ The options here are presented as if you were to put them into the <<at-plugin-i
 
 ==== MIDI input `device`
 
-The name of the device to be used. If set and available, `:MidiInputStart` will directly launch the backend without asking to select a device.
+The name of the device to be used. If set and available, `:MidiInputStart` will directly launch the backend without asking to select a device. _Also see {url-lmi-usage}[here]._
 
 [,lua]
 ----
@@ -341,7 +346,7 @@ device = 'USB-MIDI MIDI 1'
 
 ==== MIDI input `mode`
 
-Set the input mode for the backend. See {url-lmi-options}[pass:q[`lilypond-midi-input`]'s options table].
+Set the input mode for the backend. See {url-lmi-options-mode}[pass:q[`lilypond-midi-input`]'s options table].
 
 [,lua]
 ----
@@ -368,7 +373,7 @@ replace_in_comment = false
 
 ==== Sharp or flat `accidental`
 
-How to handle out-of-key accidental notes by the backend. See {url-lmi-options}[pass:q[`lilypond-midi-input`]'s options table].
+How to handle out-of-key accidental notes by the backend. See {url-lmi-options-accidentals}[pass:q[`lilypond-midi-input`]'s options table].
 
 [,lua]
 ----
@@ -377,7 +382,7 @@ accidentals = 'flats'
 
 ==== Which `key` are we in
 
-Specify a key signature for the backend. See {url-lmi-options}[pass:q[`lilypond-midi-input`]'s options table].
+Specify a key signature for the backend. See {url-lmi-options-key}[pass:q[`lilypond-midi-input`]'s options table].
 
 [,lua]
 ----
@@ -386,7 +391,7 @@ key = 'besM'
 
 ==== Custom (global) `alterations`
 
-Specify (global) alterations within an octave for the backend. See {url-lmi-options}[pass:q[`lilypond-midi-input`]'s options table].
+Specify (global) alterations within an octave for the backend. See pass:q[`lilypond-midi-input`]'s options table on {url-lmi-options-alterations}[alterations] and {url-lmi-options-global-alterations}[global alterations].
 
 NOTE: You can also pass in a Lua table instead of a string when defined in the `setup` function. The key must be given as a string, however, due to Lua shenanigans.
 
