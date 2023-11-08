@@ -29,6 +29,37 @@ function checkDevice()
     end
 end
 
+function checkDebug()
+    vim.health.report_start('Debugging')
+    local debug = opts.get().debug
+    local debug_values = {
+        'input options',
+        'key signature',
+        'previous chord',
+        'replace mode',
+    }
+    if not debug then
+        vim.health.report_info('Debugging is disabled.')
+        return
+    end
+    for _, debug_value in ipairs(debug_values) do
+        if debug == debug_value then
+            vim.health.report_warn(
+                string.format('Debugging is enabled for: %s', debug),
+                {
+                    'Setting the debug option will disable certain functionalities',
+                    'Note input will not be working anymore',
+                    'Instead of performing operations, information will be presented',
+                }
+            )
+            return
+        end
+    end
+    vim.health.report_error(
+        string.format('Invalid value for debugging: `%s`', debug)
+    )
+end
+
 function checkOptions()
     vim.health.report_start('Plugin options')
     local options = {
@@ -40,7 +71,6 @@ function checkOptions()
         { 'global_alterations', opts.get().global_alterations },
         { 'replace_q', opts.get().replace_q },
         { 'replace_in_comment', opts.get().replace_in_comment },
-        { 'debug', opts.get().debug },
     }
     local final_warning = false
     for _, option in ipairs(options) do
@@ -60,7 +90,6 @@ function checkOptions()
         vim.health.report_warn('Some options have not been given a value', {
             'Some minor things may not work as expected without default values',
             'Plugin will be unable to fallback to default options if required',
-            'Setting the debug option will disable certain functionalities',
         })
     end
 end
@@ -68,6 +97,7 @@ end
 function M.check()
     checkExecutable()
     checkDevice()
+    checkDebug()
     checkOptions()
 end
 
