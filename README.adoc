@@ -198,13 +198,14 @@ video::https://github.com/niveK77pur/midi-input.nvim/assets/10981161/3c845ef3-cb
 
 The {url-lmi}[lilypond-midi-input] must be available in the `PATH`. Please see its {url-lmi-install}[installation instructions].
 
-Once the program and its dependencies are set in place, you can install this plugin with the following using {url-lazy}[lazy.nvim], for example. Note that no options/configurations are required.
+Once the program and its dependencies are set in place, you can install this plugin with the following using {url-lazy}[lazy.nvim], for example. Note that no options/configurations are required. It is further of interest to lazy load the plugin, either by filetype and/or by command.
 
 [,lua]
 ----
 {
     'niveK77pur/midi-input.nvim',
     ft = { 'lilypond' },
+    cmd = { 'MidiInputStart' },
 }
 ----
 
@@ -267,6 +268,7 @@ In the case of {url-lazy}[lazy.nvim] you can therefore set the options either us
 {
     'niveK77pur/midi-input.nvim',
     ft = { 'lilypond' },
+    cmd = { 'MidiInputStart' },
     config = function()
         require('nvim-midi-input').setup({
             device = 'My device name',
@@ -282,6 +284,7 @@ Or alternatively in a shorter fashion:
 {
     'niveK77pur/midi-input.nvim',
     ft = { 'lilypond' },
+    cmd = { 'MidiInputStart' },
     opts = {
         device = 'My device name',
     },
