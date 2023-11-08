@@ -65,26 +65,62 @@ end
 
 local function checkOptions()
     vim.health.report_start('Plugin options')
-    local options = {
-        { 'key', opts.get().key },
-        { 'accidentals', opts.get().accidentals },
-        { 'mode', opts.get().mode },
-        { 'alterations', opts.get().alterations },
-        { 'global_alterations', opts.get().global_alterations },
-        { 'replace_q', opts.get().replace_q },
-        { 'replace_in_comment', opts.get().replace_in_comment },
+    local no_fallback_messages = {
+        'No default/fallback value exists',
+        'Option cannot be reset if needed; the previously set value will keep being used',
     }
+    local options = {
+        {
+            name = 'key',
+            value = opts.get().key,
+            warn_msg = { 'Default/Fallback value is `cM`' },
+        },
+        {
+            name = 'accidentals',
+            value = opts.get().accidentals,
+        },
+        {
+            name = 'mode',
+            value = opts.get().mode,
+        },
+        {
+            name = 'alterations',
+            value = opts.get().alterations,
+        },
+        {
+            name = 'global_alterations',
+            value = opts.get().global_alterations,
+        },
+        {
+            name = 'replace_q',
+            value = opts.get().replace_q,
+            warn_msg = { 'Default/Fallback value is `true`' },
+        },
+        {
+            name = 'replace_in_comment',
+            value = opts.get().replace_in_comment,
+            warn_msg = { 'Default/Fallback value is `false`' },
+        },
+    }
+    print(vim.inspect(options))
     local final_warning = false
     for _, option in ipairs(options) do
-        local key, value = option[1], option[2]
-        if value == nil and value ~= false then
+        if option.value == nil and option.value ~= false then
             final_warning = true
             vim.health.report_warn(
-                string.format([[Option '%s' has not been given a value.]], key)
+                string.format(
+                    [[Option '%s' has not been given a value.]],
+                    option.name
+                ),
+                option.warn_msg or {}
             )
         else
             vim.health.report_ok(
-                string.format([[Option '%s' was set to '%s']], key, value)
+                string.format(
+                    [[Option '%s' was set to '%s']],
+                    option.name,
+                    option.value
+                )
             )
         end
     end
