@@ -19,8 +19,11 @@ end
 
 local function checkDevice()
     vim.health.report_start('Default MIDI device')
-    if opts.get().device then
-        vim.health.report_ok('Default MIDI device is set')
+    local device = opts.get().device
+    if device then
+        vim.health.report_ok(
+            string.format('Default MIDI device is set to `%s`', device)
+        )
     else
         vim.health.report_warn('No default MIDI device specified', {
             'Get device names using the `lilypond-midi-input --list-devices` command',
@@ -63,7 +66,6 @@ end
 local function checkOptions()
     vim.health.report_start('Plugin options')
     local options = {
-        { 'device', opts.get().device },
         { 'key', opts.get().key },
         { 'accidentals', opts.get().accidentals },
         { 'mode', opts.get().mode },
