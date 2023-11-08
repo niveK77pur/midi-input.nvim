@@ -208,7 +208,7 @@ Once the program and its dependencies are set in place, you can install this plu
 }
 ----
 
-You can run `:checkhealth nvim-midi-input` to see if everything is set up accordingly. 
+You can run `:checkhealth nvim-midi-input` to see if everything is set up accordingly (assuming the plugin is loaded).
 
 [NOTE]
 Unfortunately, it cannot check if the {url-lmi-install}[PortMidi library] is available, so check this if the backend is not working
