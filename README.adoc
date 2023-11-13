@@ -42,6 +42,7 @@ The main reason a MIDI handler was not implemented in Lua and thus directly into
 ** Nothing will happen in any other mode
 
 +
+[#feature-demo-vim-modes]
 [example%collapsible]
 .Demo Video {videoicon}
 ====
@@ -60,6 +61,7 @@ video::https://github.com/niveK77pur/midi-input.nvim/assets/10981161/838cabf8-09
 
 * Always puts cursor right after inserted/replaced note for quick editing (i.e. add articulations, etc.)
 +
+[#feature-demo-cursor-placement]
 [%collapsible]
 .Demo Video {videoicon}
 ====
@@ -74,6 +76,7 @@ video::https://github.com/niveK77pur/midi-input.nvim/assets/10981161/2b92ed0d-50
 
 * Puts appropriate spacing around inserted notes
 +
+[#feature-demo-spacing]
 [%collapsible]
 .Demo Video {videoicon}
 ====
@@ -95,6 +98,7 @@ video::https://github.com/niveK77pur/midi-input.nvim/assets/10981161/fcebad49-6b
 ** (Global) alterations can be given as lua tables in the config
 ** `replace_q` on whether to replace a {url-lilypond-chords}[`q`]. If disabled, behaves like {url-frescobaldi}[Frescobaldi]'s replace.
 +
+[#feature-demo-replace-q]
 [%collapsible]
 .Demo Video {videoicon}
 ====
@@ -113,6 +117,7 @@ video::https://github.com/niveK77pur/midi-input.nvim/assets/10981161/9807a0bd-21
 
 * List of MIDI devices to select from when none is specified, or when the specified one is not available
 +
+[#feature-demo-list-devices]
 [%collapsible]
 .Demo Video {videoicon}
 ====
@@ -124,6 +129,7 @@ video::https://github.com/niveK77pur/midi-input.nvim/assets/10981161/f5674ada-12
 
 * Comprehensive update menu for discoverable options (`:MidiInputUpdateOptions`)
 +
+[#feature-demo-update-menu]
 [%collapsible]
 .Demo Video {videoicon}
 ====
@@ -145,6 +151,7 @@ video::https://github.com/niveK77pur/midi-input.nvim/assets/10981161/e13e11e5-39
 ** Stop MIDI input upon closing vim (if forgotten to stop manually with `:MidiInputStop`)
 ** Find the previous chord upon entering insert/replace mode (and sets {url-lmi-options}[`previous-chord`])
 +
+[#feature-demo-previous-chord]
 [%collapsible]
 .Demo Video {videoicon}
 ====
@@ -164,6 +171,7 @@ video::https://github.com/niveK77pur/midi-input.nvim/assets/10981161/8a0baa43-c9
 ====
 ** Find the previous key signature upon entering insert/replace mode (and sets {url-lmi-options}[`key`])
 +
+[#feature-demo-previous-key]
 [%collapsible]
 .Demo Video {videoicon}
 ====
@@ -180,6 +188,7 @@ video::https://github.com/niveK77pur/midi-input.nvim/assets/10981161/0c6c7ffc-a0
 ====
 ** Finds arbitrary options in the lilypond source file for {url-lmi-options}[lilypond-midi-input] which are passed as-is to the backend
 +
+[#feature-demo-lmi-options]
 [%collapsible]
 .Demo Video {videoicon}
 ====
