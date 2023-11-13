@@ -404,7 +404,7 @@ alterations = {
     ['0'] = 'YO',
     ['4'] = 'BYE',
 }
-global_alterations = '80:SIKE',
+global_alterations = '80:SIKE'
 ----
 
 ==== We need to `debug`
