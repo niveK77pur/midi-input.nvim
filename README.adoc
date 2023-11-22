@@ -35,7 +35,7 @@ The main reason a MIDI handler was not implemented in Lua and thus directly into
 * All features from {url-lmi-features}[lilypond-midi-input], reflected during inserting/replacing of notes
 
 
-* Respects vim modes (see {url-vim-modes}[`:h vim-modes`])
+* Respects vim modes (see {url-vim-modes}[`:help vim-modes`])
 
 ** Notes are only inserted when in *Insert mode*
 ** Notes are replaced when in *Replace mode*

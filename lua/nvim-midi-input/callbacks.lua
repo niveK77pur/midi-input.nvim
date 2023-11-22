@@ -1,7 +1,7 @@
 local debug = require('nvim-midi-input.debug')
 local options = require('nvim-midi-input.options')
 
----Table of callbacks for each desired mode. See `:h mode()`.
+---Table of callbacks for each desired mode. See `:help mode()`.
 ---@private
 local modeCallback = {
     ---Callback for insert mode
