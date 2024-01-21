@@ -15,9 +15,8 @@ local J = {
 ---@return boolean
 ---@nodiscard
 function J:is_running(show_message)
-    local show_message = show_message or true
     local running = (self.pid and self.handle) ~= nil
-    if not running and show_message then
+    if not running and (show_message == nil or show_message) then
         vim.notify(
             'MIDI input is not running.',
             vim.log.levels.ERROR,
@@ -118,16 +117,6 @@ function J:start(device)
             end)
         end
     end)
-
-    vim.notify(
-        string.format(
-            'Started MIDI Input Listener (%s) (%s).',
-            self.handle,
-            self.pid
-        ),
-        vim.log.levels.INFO,
-        require('nvim-midi-input').notify_table
-    )
 end
 
 ---Stop the currently running job. Silently exit if not running.
