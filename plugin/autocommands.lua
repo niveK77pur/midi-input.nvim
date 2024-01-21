@@ -105,8 +105,9 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
         elseif scale == 'major' then
             scale_short = 'M'
         else
-            vim.api.nvim_err_writeln(
-                string.format('Unknown scale provided: %s', scale)
+            vim.notify(
+                string.format('Unknown scale provided: %s', scale),
+                vim.log.levels.ERROR
             )
         end
         if debug.enabled('key signature') then

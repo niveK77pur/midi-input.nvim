@@ -18,7 +18,11 @@ function J:is_running(show_message)
     local show_message = show_message or true
     local running = (self.pid and self.handle) ~= nil
     if not running and show_message then
-        print('MIDI input is not running.')
+        vim.notify(
+            'MIDI input is not running.',
+            vim.log.levels.ERROR,
+            require('nvim-midi-input').notify_table
+        )
     end
     return running
 end
@@ -43,11 +47,19 @@ end
 ---@param device string The MIDI input device's name
 function J:start(device)
     if self:is_running(false) then
-        print('MIDI input is already running.')
+        vim.notify(
+            'MIDI input is already running.',
+            vim.log.levels.WARN,
+            require('nvim-midi-input').notify_table
+        )
         return
     end
     if not device then
-        vim.api.nvim_err_writeln('No MIDI device was specified. Aborting.')
+        vim.notify(
+            'No MIDI device was specified. Aborting.',
+            vim.log.levels.ERROR,
+            require('nvim-midi-input').notify_table
+        )
         return
     end
 
@@ -107,12 +119,14 @@ function J:start(device)
         end
     end)
 
-    print(
+    vim.notify(
         string.format(
             'Started MIDI Input Listener (%s) (%s).',
             self.handle,
             self.pid
-        )
+        ),
+        vim.log.levels.INFO,
+        require('nvim-midi-input').notify_table
     )
 end
 

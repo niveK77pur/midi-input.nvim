@@ -132,9 +132,17 @@ function C.stderr(data) --  {{{
     local info = data:match([[^:: (.*)]])
     local error = data:match([[^!! (.*)]])
     if info then
-        print('MIDI Input:', info)
+        vim.notify(
+            string.format('MIDI Input: %s', info),
+            vim.log.levels.INFO,
+            require('nvim-midi-input').notify_table
+        )
     elseif error then
-        vim.api.nvim_err_writeln(string.format('Midi Input Error: %s', error))
+        vim.notify(
+            string.format('MIDI Input Error: %s', error),
+            vim.log.levels.ERROR,
+            require('nvim-midi-input').notify_table
+        )
     end
 end --  }}}
 
@@ -143,7 +151,11 @@ end --  }}}
 ---@param signal integer
 ---@see uv.spawn
 function C.exit(code, signal) --  {{{
-    print(string.format('MIDI Input Listener exited (%s) (%s).', code, signal))
+    vim.notify(
+        string.format('MIDI Input Listener exited (%s) (%s).', code, signal),
+        vim.log.levels.INFO,
+        require('nvim-midi-input').notify_table
+    )
     require('nvim-midi-input.job'):clear()
 end --  }}}
 

@@ -76,8 +76,10 @@ function O.parse_alterations(alts)
         end
         return s
     else
-        vim.api.nvim_err_writeln(
-            'Invalid type for alterations. String or Table.'
+        vim.notify(
+            'Invalid type for alterations. String or Table.',
+            vim.log.levels.ERROR,
+            require('nvim-midi-input').notify_table
         )
     end
 end
