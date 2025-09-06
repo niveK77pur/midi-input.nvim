@@ -28,7 +28,7 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
         vim.api.nvim_win_set_cursor(0, cursor)
         if e_row == 0 and e_col == 0 then
             if debug.enabled('previous chord') then
-                vim.api.nvim_err_writeln('No previous chord found.')
+                vim.api.nvim_echo({ { 'No previous chord found.' } }, true, { err = true })
                 return
             end
             job:write('previous-chord=clear')
@@ -63,7 +63,7 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
         local e_row, e_col = unpack(vim.fn.searchpos(key_pattern, 'bWne'))
         if s_row == 0 and s_col == 0 and e_row == 0 and e_col == 0 then
             if debug.enabled('key signature') then
-                vim.api.nvim_err_writeln('No previous key signature found.')
+                vim.api.nvim_echo({ { 'No previous key signature found.' } }, true, { err = true })
             end
             if job:is_running(false) then
                 job:write(string.format('key=%s', options.get().key or 'cM'))
@@ -71,7 +71,7 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
             return
         elseif s_row > e_row or s_col > e_col then
             if debug.enabled('key signature') then
-                vim.api.nvim_err_writeln('Inside a key signature definition.')
+                vim.api.nvim_echo({ { 'Inside a key signature definition.' } }, true, { err = true })
             end
             return
         end
@@ -112,15 +112,17 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
         if s_row == 0 and s_col == 0 and e_row == 0 and e_col == 0 then
             if debug.enabled('input options') then
                 print(s_row, s_col, e_row, e_col)
-                vim.api.nvim_err_writeln(
-                    string.format(
-                        'No previous lilypond-midi-input settings found. Default settings: accidentals=%s mode=%s alterations=%s global-alterations=%s',
-                        options.get().accidentals,
-                        options.get().mode,
-                        options.parse_alterations(options.get().alterations),
-                        options.parse_alterations(options.get().global_alterations)
-                    )
-                )
+                vim.api.nvim_echo({
+                    {
+                        string.format(
+                            'No previous lilypond-midi-input settings found. Default settings: accidentals=%s mode=%s alterations=%s global-alterations=%s',
+                            options.get().accidentals,
+                            options.get().mode,
+                            options.parse_alterations(options.get().alterations),
+                            options.parse_alterations(options.get().global_alterations)
+                        ),
+                    },
+                }, true, { err = true })
                 return
             end
             -- key is managed by another autocommand
@@ -136,7 +138,7 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
             return
         elseif s_row > e_row or s_col > e_col then
             if debug.enabled('input options') then
-                vim.api.nvim_err_writeln('Inside an options definition.')
+                vim.api.nvim_echo({ { 'Inside an options definition.' } }, true, { err = true })
             end
             return
         end
@@ -144,15 +146,17 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
         if lmi_options:match('^disable') then
             if debug.enabled('input options') then
                 print(vim.inspect(lmi_options))
-                vim.api.nvim_err_writeln(
-                    string.format(
-                        'Explicitly falling back to default settings: accidentals=%s mode=%s alterations=%s global-alterations=%s',
-                        options.get().accidentals,
-                        options.get().mode,
-                        options.parse_alterations(options.get().alterations),
-                        options.parse_alterations(options.get().global_alterations)
-                    )
-                )
+                vim.api.nvim_echo({
+                    {
+                        string.format(
+                            'Explicitly falling back to default settings: accidentals=%s mode=%s alterations=%s global-alterations=%s',
+                            options.get().accidentals,
+                            options.get().mode,
+                            options.parse_alterations(options.get().alterations),
+                            options.parse_alterations(options.get().global_alterations)
+                        ),
+                    },
+                }, true, { err = true })
                 return
             end
             job:write(
