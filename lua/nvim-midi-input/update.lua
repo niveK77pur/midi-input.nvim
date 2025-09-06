@@ -94,7 +94,7 @@ end --  }}}
 
 ---Update the replace_q value.
 ---@param value boolean?
-function U.updateReplaceQ(value)
+function U.updateReplaceQ(value) --  {{{
     if not value then
         vim.ui.select({ 'yes', 'no' }, { prompt = 'Should `q` be replaced?' }, function(choice)
             options.set({
@@ -104,7 +104,7 @@ function U.updateReplaceQ(value)
     else
         options.set({ replace_q = value })
     end
-end
+end --  }}}
 
 ---Convenience function for updating options. It renders all options and their
 ---values highly discoverable by having the user navigate through a list of
