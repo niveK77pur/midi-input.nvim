@@ -75,6 +75,7 @@ function O.parse_alterations(alts)
             vim.log.levels.ERROR,
             require('nvim-midi-input').notify_table
         )
+        return nil
     end
 end
 
