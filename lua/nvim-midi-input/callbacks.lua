@@ -115,11 +115,7 @@ function C.stderr(data) --  {{{
     if info then
         C.notify(string.format('MIDI Input: %s', info), vim.log.levels.INFO, require('nvim-midi-input').notify_table)
     elseif error then
-        C.notify(
-            string.format('MIDI Input Error: %s', error),
-            vim.log.levels.ERROR,
-            require('nvim-midi-input').notify_table
-        )
+        C.notify(string.format('MIDI Input: %s', error), vim.log.levels.ERROR, require('nvim-midi-input').notify_table)
     else
         C.notify(
             string.format('lilypond-midi-input: %s', data),
