@@ -66,6 +66,23 @@ function U.updateMidiMode(mode) --  {{{
     end
 end --  }}}
 
+---Update/Change the note language. See `lilypond-midi-input --list-options language`.
+---@param language string? If not specified, the user will be prompted to select from a list of options.
+function U.updateMidiLanguage(language) --  {{{
+    if not job:is_running() then
+        return
+    end
+    if not language then
+        vim.ui.select(getOptions('language'), { prompt = 'Chose a note language' }, function(choice)
+            job:write(string.format('language=%s', choice))
+            options.set({ language = choice })
+        end)
+    else
+        job:write(string.format('language=%s', language))
+        options.set({ language = language })
+    end
+end --  }}}
+
 ---Update the alterations. See `lilypond-midi-input`'s documentation.
 ---@param alts Alterations|string
 function U.updateMidiAlterations(alts) --  {{{
@@ -117,6 +134,7 @@ function U.updateMidiOptions() --  {{{
         'key',
         'accidentals',
         'mode',
+        'language',
         'alterations',
         'global alterations',
         'replace q',
@@ -125,6 +143,7 @@ function U.updateMidiOptions() --  {{{
             key = U.updateMidiKey,
             accidentals = U.updateMidiAccidentals,
             mode = U.updateMidiMode,
+            language = U.updateMidiLanguage,
             alterations = U.updateMidiAlterations,
             ['global alterations'] = U.updateMidiGlobalAlterations,
             ['replace q'] = U.updateReplaceQ,
