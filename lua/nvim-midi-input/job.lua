@@ -102,7 +102,9 @@ function J:start(device)
         assert(not err, err)
         if data then
             vim.schedule(function()
-                self.callbacks.stderr(data)
+                for _, line in ipairs(vim.fn.split(data, [[\n]])) do
+                    self.callbacks.stderr(line)
+                end
             end)
         end
     end)
