@@ -70,6 +70,10 @@ function J:start(device)
         table.insert(args, '--mode')
         table.insert(args, options.get().mode)
     end
+    if options.get().language then
+        table.insert(args, '--language')
+        table.insert(args, options.get().language)
+    end
     if options.get().alterations then
         table.insert(args, '--alterations')
         table.insert(args, options.parse_alterations(options.get().alterations))
