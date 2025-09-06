@@ -2,23 +2,23 @@ local M = {}
 local opts = require('nvim-midi-input.options')
 
 local function checkExecutable()
-    vim.health.report_start('External dependency')
+    vim.health.start('External dependency')
     if vim.fn.executable('lilypond-midi-input') == 1 then
-        vim.health.report_ok(
+        vim.health.ok(
             string.format('External command `lilypond-midi-input` found in %s', vim.fn.exepath('lilypond-midi-input'))
         )
     else
-        vim.health.report_error('External command `lilypond-midi-input` not found')
+        vim.health.error('External command `lilypond-midi-input` not found')
     end
 end
 
 local function checkDevice()
-    vim.health.report_start('Default MIDI device')
+    vim.health.start('Default MIDI device')
     local device = opts.get().device
     if device then
-        vim.health.report_ok(string.format('Default MIDI device is set to `%s`', device))
+        vim.health.ok(string.format('Default MIDI device is set to `%s`', device))
     else
-        vim.health.report_warn('No default MIDI device specified', {
+        vim.health.warn('No default MIDI device specified', {
             'Get device names using the `lilypond-midi-input --list-devices` command',
             'A list of device names is presented by this plugin if no device is specified upon starting the job',
         })
@@ -26,7 +26,7 @@ local function checkDevice()
 end
 
 local function checkDebug()
-    vim.health.report_start('Debugging')
+    vim.health.start('Debugging')
     local debug = opts.get().debug
     local debug_values = {
         'input options',
@@ -35,12 +35,12 @@ local function checkDebug()
         'replace mode',
     }
     if not debug then
-        vim.health.report_info('Debugging is disabled.')
+        vim.health.info('Debugging is disabled.')
         return
     end
     for _, debug_value in ipairs(debug_values) do
         if debug == debug_value then
-            vim.health.report_warn(string.format('Debugging is enabled for: %s', debug), {
+            vim.health.warn(string.format('Debugging is enabled for: %s', debug), {
                 'Setting the debug option will disable certain functionalities',
                 'Note input will not be working anymore',
                 'Instead of performing operations, information will be presented',
@@ -48,11 +48,11 @@ local function checkDebug()
             return
         end
     end
-    vim.health.report_error(string.format('Invalid value for debugging: `%s`', debug))
+    vim.health.error(string.format('Invalid value for debugging: `%s`', debug))
 end
 
 local function checkOptions()
-    vim.health.report_start('Plugin options')
+    vim.health.start('Plugin options')
     local no_fallback_messages = {
         'No default/fallback value exists',
         'Option cannot be reset if needed; the previously set value will keep being used',
@@ -95,16 +95,16 @@ local function checkOptions()
     for _, option in ipairs(options) do
         if option.value == nil and option.value ~= false then
             final_warning = true
-            vim.health.report_warn(
+            vim.health.warn(
                 string.format([[Option '%s' has not been given a value.]], option.name),
                 option.warn_msg or no_fallback_messages
             )
         else
-            vim.health.report_ok(string.format([[Option '%s' was set to '%s']], option.name, option.value))
+            vim.health.ok(string.format([[Option '%s' was set to '%s']], option.name, option.value))
         end
     end
     if final_warning then
-        vim.health.report_warn('Some options have not been given a value', {
+        vim.health.warn('Some options have not been given a value', {
             'Some minor things may not work as expected without default values',
             'Plugin will be unable to fallback to default options if required',
         })
