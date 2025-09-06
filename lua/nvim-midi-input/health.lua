@@ -12,6 +12,28 @@ local function checkExecutable()
     end
 end
 
+local function checkVersion()
+    vim.health.start('External dependency version')
+    local obj = vim.system({ 'lilypond-midi-input', '--version' }):wait()
+    local version_str = obj.stdout:match('lilypond%-midi%-input (%d+%.%d+%.%d+)')
+    if version_str == nil then
+        vim.health.warn('Could not determine lilypond-midi-input version')
+        return
+    end
+    local version = vim.version.parse(version_str)
+    if version == nil then
+        vim.health.warn(string.format('Could not parse lilypond-midi-input version; found: %s', version_str))
+        return
+    end
+    if vim.version.ge(version, { 0, 10, 0 }) then
+        vim.health.ok(
+            string.format('lilypond-midi-input is sufficiently up-to-date; requires at least 0.10, has %s', version_str)
+        )
+    else
+        vim.health.error(string.format('Update lilypond-midi-input to the latest version; found %s', version_str))
+    end
+end
+
 local function checkDevice()
     vim.health.start('Default MIDI device')
     local device = opts.get().device
@@ -72,6 +94,10 @@ local function checkOptions()
             value = opts.get().mode,
         },
         {
+            name = 'language',
+            value = opts.get().language,
+        },
+        {
             name = 'alterations',
             value = opts.get().alterations,
         },
@@ -113,6 +139,7 @@ end
 
 function M.check()
     checkExecutable()
+    checkVersion()
     checkDevice()
     checkDebug()
     checkOptions()
