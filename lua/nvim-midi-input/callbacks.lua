@@ -120,6 +120,12 @@ function C.stderr(data) --  {{{
             vim.log.levels.ERROR,
             require('nvim-midi-input').notify_table
         )
+    else
+        C.notify(
+            string.format('lilypond-midi-input: %s', data),
+            vim.log.levels.ERROR,
+            require('nvim-midi-input').notify_table
+        )
     end
 end --  }}}
 
