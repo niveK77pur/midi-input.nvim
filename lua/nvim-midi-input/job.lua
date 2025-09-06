@@ -17,11 +17,7 @@ local J = {
 function J:is_running(show_message)
     local running = (self.pid and self.handle) ~= nil
     if not running and (show_message == nil or show_message) then
-        vim.notify(
-            'MIDI input is not running.',
-            vim.log.levels.ERROR,
-            require('nvim-midi-input').notify_table
-        )
+        vim.notify('MIDI input is not running.', vim.log.levels.ERROR, require('nvim-midi-input').notify_table)
     end
     return running
 end
@@ -46,11 +42,7 @@ end
 ---@param device string The MIDI input device's name
 function J:start(device)
     if self:is_running(false) then
-        vim.notify(
-            'MIDI input is already running.',
-            vim.log.levels.WARN,
-            require('nvim-midi-input').notify_table
-        )
+        vim.notify('MIDI input is already running.', vim.log.levels.WARN, require('nvim-midi-input').notify_table)
         return
     end
     if not device then
@@ -85,10 +77,7 @@ function J:start(device)
     end
     if options.get().global_alterations then
         table.insert(args, '--global-alterations')
-        table.insert(
-            args,
-            options.parse_alterations(options.get().global_alterations)
-        )
+        table.insert(args, options.parse_alterations(options.get().global_alterations))
     end
 
     self.handle, self.pid = uv.spawn('lilypond-midi-input', {

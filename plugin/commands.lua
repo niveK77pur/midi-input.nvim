@@ -1,6 +1,6 @@
 local job = require('nvim-midi-input.job')
-local update = require('nvim-midi-input.update')
 local options = require('nvim-midi-input.options')
+local update = require('nvim-midi-input.update')
 
 ---@private
 ---Check if the given device name is among the list of available devices.
@@ -32,10 +32,6 @@ vim.api.nvim_create_user_command('MidiInputStop', function()
     job:stop()
 end, { desc = 'Stop MIDI Input Listener' })
 
-vim.api.nvim_create_user_command(
-    'MidiInputUpdateOptions',
-    update.updateMidiOptions,
-    {
-        desc = 'Update MIDI options',
-    }
-)
+vim.api.nvim_create_user_command('MidiInputUpdateOptions', update.updateMidiOptions, {
+    desc = 'Update MIDI options',
+})

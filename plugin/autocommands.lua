@@ -1,9 +1,8 @@
-local job = require('nvim-midi-input.job')
 local debug = require('nvim-midi-input.debug')
+local job = require('nvim-midi-input.job')
 local options = require('nvim-midi-input.options')
 
-local augroup_midideviceinput =
-    vim.api.nvim_create_augroup('midideviceinput', {})
+local augroup_midideviceinput = vim.api.nvim_create_augroup('midideviceinput', {})
 
 vim.api.nvim_create_autocmd({ 'ExitPre', 'VimLeavePre' }, {
     group = augroup_midideviceinput,
@@ -39,18 +38,8 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
             print(e_row, e_col, s_row, s_col)
             debug.markStartEnd(s_row - 1, s_col - 1, e_row - 1, e_col - 1)
         end
-        local chord = string.gsub(
-            vim.api.nvim_buf_get_text(
-                0,
-                s_row - 1,
-                s_col,
-                e_row - 1,
-                e_col - 1,
-                {}
-            )[1],
-            '%s+',
-            ':'
-        )
+        local chord =
+            string.gsub(vim.api.nvim_buf_get_text(0, s_row - 1, s_col, e_row - 1, e_col - 1, {})[1], '%s+', ':')
         if debug.enabled('previous chord') then
             print('Chord: ', chord)
         end
@@ -69,9 +58,7 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
         if not (job:is_running(false) or debug.enabled('key signature')) then
             return
         end
-        local key_pattern = [[\v\\key\s+]]
-            .. '[[:alpha:]]'
-            .. [[+\s+\\%(major|minor)]]
+        local key_pattern = [[\v\\key\s+]] .. '[[:alpha:]]' .. [[+\s+\\%(major|minor)]]
         local s_row, s_col = unpack(vim.fn.searchpos(key_pattern, 'bWn'))
         local e_row, e_col = unpack(vim.fn.searchpos(key_pattern, 'bWne'))
         if s_row == 0 and s_col == 0 and e_row == 0 and e_col == 0 then
@@ -89,14 +76,7 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
             return
         end
         local key, scale = string.match(
-            vim.api.nvim_buf_get_text(
-                0,
-                s_row - 1,
-                s_col - 1,
-                e_row - 1,
-                e_col,
-                {}
-            )[1],
+            vim.api.nvim_buf_get_text(0, s_row - 1, s_col - 1, e_row - 1, e_col, {})[1],
             [[\key%s+(%w+)%s\(%w+)]]
         )
         local scale_short
@@ -105,10 +85,7 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
         elseif scale == 'major' then
             scale_short = 'M'
         else
-            vim.notify(
-                string.format('Unknown scale provided: %s', scale),
-                vim.log.levels.ERROR
-            )
+            vim.notify(string.format('Unknown scale provided: %s', scale), vim.log.levels.ERROR)
         end
         if debug.enabled('key signature') then
             print('Key, Scale:', key, scale, scale_short)
@@ -141,9 +118,7 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
                         options.get().accidentals,
                         options.get().mode,
                         options.parse_alterations(options.get().alterations),
-                        options.parse_alterations(
-                            options.get().global_alterations
-                        )
+                        options.parse_alterations(options.get().global_alterations)
                     )
                 )
                 return
@@ -165,14 +140,7 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
             end
             return
         end
-        local lmi_options = vim.api.nvim_buf_get_text(
-            0,
-            s_row - 1,
-            s_col - 1,
-            e_row - 1,
-            e_col,
-            {}
-        )[1]
+        local lmi_options = vim.api.nvim_buf_get_text(0, s_row - 1, s_col - 1, e_row - 1, e_col, {})[1]
         if lmi_options:match('^disable') then
             if debug.enabled('input options') then
                 print(vim.inspect(lmi_options))
@@ -182,9 +150,7 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
                         options.get().accidentals,
                         options.get().mode,
                         options.parse_alterations(options.get().alterations),
-                        options.parse_alterations(
-                            options.get().global_alterations
-                        )
+                        options.parse_alterations(options.get().global_alterations)
                     )
                 )
                 return

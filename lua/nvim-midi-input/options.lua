@@ -43,9 +43,7 @@ end
 ---@return string[]
 function O.get_devices()
     local devices = {}
-    for _, line in
-        ipairs(vim.fn.systemlist('lilypond-midi-input --list-devices'))
-    do
+    for _, line in ipairs(vim.fn.systemlist('lilypond-midi-input --list-devices')) do
         table.insert(devices, string.match(line, [[^[^:]+:%s*(.*)]]))
     end
     return devices
@@ -54,13 +52,9 @@ end
 ---Let user select from a list of MIDI input device names
 ---@param func fun(choice: string) Function to apply on the chosen device name
 function O.query_devices(func)
-    vim.ui.select(
-        O.get_devices(),
-        { prompt = 'Chose a MIDI input controller' },
-        function(choice)
-            func(choice)
-        end
-    )
+    vim.ui.select(O.get_devices(), { prompt = 'Chose a MIDI input controller' }, function(choice)
+        func(choice)
+    end)
 end
 
 ---Parse alterations

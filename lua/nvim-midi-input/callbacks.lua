@@ -15,35 +15,23 @@ local modeCallback = {
         local prev_char_is_space = true
         local next_char_is_space = true
         if col > 0 then
-            prev_char_is_space = vim.api
-                .nvim_buf_get_text(0, row - 1, col - 1, row - 1, col, {})[1]
-                :match('%s')
+            prev_char_is_space = vim.api.nvim_buf_get_text(0, row - 1, col - 1, row - 1, col, {})[1]:match('%s')
         end
         if col < vim.api.nvim_get_current_line():len() then
-            next_char_is_space = vim.api
-                .nvim_buf_get_text(0, row - 1, col, row - 1, col + 1, {})[1]
-                :match('%s')
+            next_char_is_space = vim.api.nvim_buf_get_text(0, row - 1, col, row - 1, col + 1, {})[1]:match('%s')
         end
 
-        data = string.format(
-            '%s%s%s',
-            prev_char_is_space and '' or ' ',
-            vim.trim(data),
-            next_char_is_space and '' or ' '
-        )
+        data =
+            string.format('%s%s%s', prev_char_is_space and '' or ' ', vim.trim(data), next_char_is_space and '' or ' ')
 
         vim.api.nvim_buf_set_text(0, row - 1, col, row - 1, col, { data })
-        vim.api.nvim_win_set_cursor(
-            0,
-            { row, col + data:len() + (next_char_is_space and 0 or -1) }
-        )
+        vim.api.nvim_win_set_cursor(0, { row, col + data:len() + (next_char_is_space and 0 or -1) })
     end,
     ---Callback for replace mode
     ---@param data string
     ['R'] = function(data)
         -- search for next note/chord
-        local search_pattern =
-            [[\v%(^|\s+)\zs[abcdefg]%([ie]?s)*[',]*\=?[',]*|\<[^>]{-}\>]]
+        local search_pattern = [[\v%(^|\s+)\zs[abcdefg]%([ie]?s)*[',]*\=?[',]*|\<[^>]{-}\>]]
         if options.get().replace_q then
             search_pattern = search_pattern .. [[|\s+\zsq]]
         end
@@ -61,16 +49,9 @@ local modeCallback = {
             -- check if inside a comment
             vim.api.nvim_win_set_cursor(0, { s_row, s_col - 1 })
             local c_row, c_col = unpack(vim.fn.searchpos([[%[{}]\@!]], 'cnbW'))
-            if
-                c_row ~= 0
-                and c_col ~= 0
-                and c_row == s_row
-                and c_col < s_col
-            then
+            if c_row ~= 0 and c_col ~= 0 and c_row == s_row and c_col < s_col then
                 if debug.enabled('replace mode') then
-                    vim.api.nvim_err_writeln(
-                        'Next note/chord is inside a single-line comment'
-                    )
+                    vim.api.nvim_err_writeln('Next note/chord is inside a single-line comment')
                 end
                 return
             end
@@ -86,9 +67,7 @@ local modeCallback = {
             then
                 if debug.enabled('replace mode') then
                     print(c_row, c_col, ms_row, ms_col, me_row, me_col)
-                    vim.api.nvim_err_writeln(
-                        'Next note/chord is inside a multi-line comment'
-                    )
+                    vim.api.nvim_err_writeln('Next note/chord is inside a multi-line comment')
                 end
                 return
             end
@@ -98,18 +77,10 @@ local modeCallback = {
         end
 
         if -- a match was found
-            not (s_row == 0 and s_col == 0)
-            and not (e_row == 0 and e_col == 0)
+            not (s_row == 0 and s_col == 0) and not (e_row == 0 and e_col == 0)
         then
             data = vim.trim(data)
-            vim.api.nvim_buf_set_text(
-                0,
-                s_row - 1,
-                s_col - 1,
-                e_row - 1,
-                e_col,
-                { data }
-            )
+            vim.api.nvim_buf_set_text(0, s_row - 1, s_col - 1, e_row - 1, e_col, { data })
             vim.api.nvim_win_set_cursor(0, { s_row, s_col - 1 + data:len() })
         end
     end,
@@ -132,11 +103,7 @@ function C.stderr(data) --  {{{
     local info = data:match([[^:: (.*)]])
     local error = data:match([[^!! (.*)]])
     if info then
-        vim.notify(
-            string.format('MIDI Input: %s', info),
-            vim.log.levels.INFO,
-            require('nvim-midi-input').notify_table
-        )
+        vim.notify(string.format('MIDI Input: %s', info), vim.log.levels.INFO, require('nvim-midi-input').notify_table)
     elseif error then
         vim.notify(
             string.format('MIDI Input Error: %s', error),

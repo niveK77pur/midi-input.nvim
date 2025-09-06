@@ -8,13 +8,7 @@ local U = {}
 ---@return string[]
 local function getOptions(arg)
     local choices = {}
-    for _, line in
-        ipairs(
-            vim.fn.systemlist(
-                string.format('lilypond-midi-input --list-options %s', arg)
-            )
-        )
-    do
+    for _, line in ipairs(vim.fn.systemlist(string.format('lilypond-midi-input --list-options %s', arg))) do
         local value = line:match('^([^%s]+)')
         table.insert(choices, value)
     end
@@ -28,14 +22,10 @@ function U.updateMidiKey(key) --  {{{
         return
     end
     if not key then
-        vim.ui.select(
-            getOptions('key'),
-            { prompt = 'Chose a musical key' },
-            function(choice)
-                job:write(string.format('key=%s', choice))
-                options.set({ key = choice })
-            end
-        )
+        vim.ui.select(getOptions('key'), { prompt = 'Chose a musical key' }, function(choice)
+            job:write(string.format('key=%s', choice))
+            options.set({ key = choice })
+        end)
     else
         job:write(string.format('key=%s', key))
         options.set({ key = key })
@@ -49,14 +39,10 @@ function U.updateMidiAccidentals(accidentals) --  {{{
         return
     end
     if not accidentals then
-        vim.ui.select(
-            getOptions('accidentals'),
-            { prompt = 'Chose an accidentals style' },
-            function(choice)
-                job:write(string.format('accidentals=%s', choice))
-                options.set({ accidentals = choice })
-            end
-        )
+        vim.ui.select(getOptions('accidentals'), { prompt = 'Chose an accidentals style' }, function(choice)
+            job:write(string.format('accidentals=%s', choice))
+            options.set({ accidentals = choice })
+        end)
     else
         job:write(string.format('accidentals=%s', accidentals))
         options.set({ accidentals = accidentals })
@@ -70,14 +56,10 @@ function U.updateMidiMode(mode) --  {{{
         return
     end
     if not mode then
-        vim.ui.select(
-            getOptions('mode'),
-            { prompt = 'Chose a MIDI input mode' },
-            function(choice)
-                job:write(string.format('mode=%s', choice))
-                options.set({ mode = choice })
-            end
-        )
+        vim.ui.select(getOptions('mode'), { prompt = 'Chose a MIDI input mode' }, function(choice)
+            job:write(string.format('mode=%s', choice))
+            options.set({ mode = choice })
+        end)
     else
         job:write(string.format('mode=%s', mode))
         options.set({ mode = mode })
@@ -106,9 +88,7 @@ function U.updateMidiGlobalAlterations(galts) --  {{{
     if not galts then
         galts = vim.fn.input('Enter global alterations: ')
     end
-    job:write(
-        string.format('global-alterations=%s', options.parse_alterations(galts))
-    )
+    job:write(string.format('global-alterations=%s', options.parse_alterations(galts)))
     options.set({ global_alterations = galts })
 end --  }}}
 
@@ -116,15 +96,11 @@ end --  }}}
 ---@param value boolean?
 function U.updateReplaceQ(value)
     if not value then
-        vim.ui.select(
-            { 'yes', 'no' },
-            { prompt = 'Should `q` be replaced?' },
-            function(choice)
-                options.set({
-                    replace_q = (choice == 'yes'),
-                })
-            end
-        )
+        vim.ui.select({ 'yes', 'no' }, { prompt = 'Should `q` be replaced?' }, function(choice)
+            options.set({
+                replace_q = (choice == 'yes'),
+            })
+        end)
     else
         options.set({ replace_q = value })
     end

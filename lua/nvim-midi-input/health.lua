@@ -5,15 +5,10 @@ local function checkExecutable()
     vim.health.report_start('External dependency')
     if vim.fn.executable('lilypond-midi-input') == 1 then
         vim.health.report_ok(
-            string.format(
-                'External command `lilypond-midi-input` found in %s',
-                vim.fn.exepath('lilypond-midi-input')
-            )
+            string.format('External command `lilypond-midi-input` found in %s', vim.fn.exepath('lilypond-midi-input'))
         )
     else
-        vim.health.report_error(
-            'External command `lilypond-midi-input` not found'
-        )
+        vim.health.report_error('External command `lilypond-midi-input` not found')
     end
 end
 
@@ -21,9 +16,7 @@ local function checkDevice()
     vim.health.report_start('Default MIDI device')
     local device = opts.get().device
     if device then
-        vim.health.report_ok(
-            string.format('Default MIDI device is set to `%s`', device)
-        )
+        vim.health.report_ok(string.format('Default MIDI device is set to `%s`', device))
     else
         vim.health.report_warn('No default MIDI device specified', {
             'Get device names using the `lilypond-midi-input --list-devices` command',
@@ -47,20 +40,15 @@ local function checkDebug()
     end
     for _, debug_value in ipairs(debug_values) do
         if debug == debug_value then
-            vim.health.report_warn(
-                string.format('Debugging is enabled for: %s', debug),
-                {
-                    'Setting the debug option will disable certain functionalities',
-                    'Note input will not be working anymore',
-                    'Instead of performing operations, information will be presented',
-                }
-            )
+            vim.health.report_warn(string.format('Debugging is enabled for: %s', debug), {
+                'Setting the debug option will disable certain functionalities',
+                'Note input will not be working anymore',
+                'Instead of performing operations, information will be presented',
+            })
             return
         end
     end
-    vim.health.report_error(
-        string.format('Invalid value for debugging: `%s`', debug)
-    )
+    vim.health.report_error(string.format('Invalid value for debugging: `%s`', debug))
 end
 
 local function checkOptions()
@@ -108,20 +96,11 @@ local function checkOptions()
         if option.value == nil and option.value ~= false then
             final_warning = true
             vim.health.report_warn(
-                string.format(
-                    [[Option '%s' has not been given a value.]],
-                    option.name
-                ),
+                string.format([[Option '%s' has not been given a value.]], option.name),
                 option.warn_msg or {}
             )
         else
-            vim.health.report_ok(
-                string.format(
-                    [[Option '%s' was set to '%s']],
-                    option.name,
-                    option.value
-                )
-            )
+            vim.health.report_ok(string.format([[Option '%s' was set to '%s']], option.name, option.value))
         end
     end
     if final_warning then
