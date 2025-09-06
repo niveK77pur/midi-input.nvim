@@ -108,6 +108,9 @@ local function reset_midi_options()
             { 'mode=' },
             { tostring(options.get().mode) },
             { ' ' },
+            { 'language=' },
+            { tostring(options.get().language) },
+            { ' ' },
             { 'alterations=' },
             { tostring(options.parse_alterations(options.get().alterations)) },
             { ' ' },
@@ -122,6 +125,9 @@ local function reset_midi_options()
     end
     if options.get().mode ~= nil then
         job:write(string.format('mode=%s', options.get().mode))
+    end
+    if options.get().language ~= nil then
+        job:write(string.format('language=%s', options.get().language))
     end
     if options.get().alterations ~= nil then
         job:write(string.format('alterations=%s', options.get().alterations))
