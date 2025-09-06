@@ -88,6 +88,16 @@ local modeCallback = {
 
 local C = {}
 
+---Helper notify to wrap callback notifications into vim.schedule
+---@param msg string
+---@param level integer|nil
+---@param opts table|nil
+function C.notify(msg, level, opts)
+    vim.schedule(function()
+        vim.notify(msg, level, opts)
+    end)
+end
+
 ---Callback for handling the stdout stream from job
 ---@param data string A single string coming in from the job's output stream
 function C.stdout(data) --  {{{
@@ -103,9 +113,9 @@ function C.stderr(data) --  {{{
     local info = data:match([[^:: (.*)]])
     local error = data:match([[^!! (.*)]])
     if info then
-        vim.notify(string.format('MIDI Input: %s', info), vim.log.levels.INFO, require('nvim-midi-input').notify_table)
+        C.notify(string.format('MIDI Input: %s', info), vim.log.levels.INFO, require('nvim-midi-input').notify_table)
     elseif error then
-        vim.notify(
+        C.notify(
             string.format('MIDI Input Error: %s', error),
             vim.log.levels.ERROR,
             require('nvim-midi-input').notify_table
@@ -118,7 +128,7 @@ end --  }}}
 ---@param signal integer
 ---@see uv.spawn
 function C.exit(code, signal) --  {{{
-    vim.notify(
+    C.notify(
         string.format('MIDI Input Listener exited (%s) (%s).', code, signal),
         vim.log.levels.INFO,
         require('nvim-midi-input').notify_table
