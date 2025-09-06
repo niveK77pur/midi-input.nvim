@@ -98,6 +98,39 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
     end,
 })
 
+local function reset_midi_options()
+    if debug.enabled('input options') then
+        vim.api.nvim_echo({
+            { 'No previous lilypond-midi-input settings found. Default settings:' },
+            { 'accidentals=' },
+            { tostring(options.get().accidentals) },
+            { ' ' },
+            { 'mode=' },
+            { tostring(options.get().mode) },
+            { ' ' },
+            { 'alterations=' },
+            { tostring(options.parse_alterations(options.get().alterations)) },
+            { ' ' },
+            { 'global-alterations=' },
+            { tostring(options.parse_alterations(options.get().global_alterations)) },
+        }, true, { err = true })
+        return
+    end
+    -- 'key' is managed by another autocommand
+    if options.get().accidentals ~= nil then
+        job:write(string.format('accidentals=%s', options.get().accidentals))
+    end
+    if options.get().mode ~= nil then
+        job:write(string.format('mode=%s', options.get().mode))
+    end
+    if options.get().alterations ~= nil then
+        job:write(string.format('alterations=%s', options.get().alterations))
+    end
+    if options.get().global_alterations ~= nil then
+        job:write(string.format('global-alterations=%s', options.get().global_alterations))
+    end
+end
+
 vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
     group = augroup_midideviceinput,
     pattern = { '*' },
@@ -112,29 +145,8 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
         if s_row == 0 and s_col == 0 and e_row == 0 and e_col == 0 then
             if debug.enabled('input options') then
                 print(s_row, s_col, e_row, e_col)
-                vim.api.nvim_echo({
-                    {
-                        string.format(
-                            'No previous lilypond-midi-input settings found. Default settings: accidentals=%s mode=%s alterations=%s global-alterations=%s',
-                            options.get().accidentals,
-                            options.get().mode,
-                            options.parse_alterations(options.get().alterations),
-                            options.parse_alterations(options.get().global_alterations)
-                        ),
-                    },
-                }, true, { err = true })
-                return
             end
-            -- key is managed by another autocommand
-            job:write(
-                string.format(
-                    'accidentals=%s mode=%s alterations=%s global-alterations=%s',
-                    options.get().accidentals,
-                    options.get().mode,
-                    options.get().alterations,
-                    options.get().global_alterations
-                )
-            )
+            reset_midi_options()
             return
         elseif s_row > e_row or s_col > e_col then
             if debug.enabled('input options') then
@@ -144,30 +156,8 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
         end
         local lmi_options = vim.api.nvim_buf_get_text(0, s_row - 1, s_col - 1, e_row - 1, e_col, {})[1]
         if lmi_options:match('^disable') then
-            if debug.enabled('input options') then
-                print(vim.inspect(lmi_options))
-                vim.api.nvim_echo({
-                    {
-                        string.format(
-                            'Explicitly falling back to default settings: accidentals=%s mode=%s alterations=%s global-alterations=%s',
-                            options.get().accidentals,
-                            options.get().mode,
-                            options.parse_alterations(options.get().alterations),
-                            options.parse_alterations(options.get().global_alterations)
-                        ),
-                    },
-                }, true, { err = true })
-                return
-            end
-            job:write(
-                string.format(
-                    'accidentals=%s mode=%s alterations=%s global-alterations=%s',
-                    options.get().accidentals,
-                    options.get().mode,
-                    options.get().alterations,
-                    options.get().global_alterations
-                )
-            )
+            reset_midi_options()
+            return
         end
         if debug.enabled('input options') then
             print(vim.inspect(lmi_options))
