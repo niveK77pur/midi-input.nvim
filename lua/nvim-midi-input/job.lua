@@ -1,4 +1,3 @@
-local uv = vim.loop
 local options = require('nvim-midi-input.options')
 
 local J = {
@@ -35,7 +34,7 @@ end
 ---@param s string Data to be sent
 function J:write(s)
     -- without the newline, Rust won't take the input
-    uv.write(self.stdin, string.format('%s\n', vim.trim(s)))
+    vim.uv.write(self.stdin, string.format('%s\n', vim.trim(s)))
 end
 
 ---Start a new job (if not already running)
@@ -54,9 +53,9 @@ function J:start(device)
         return
     end
 
-    self.stdin = uv.new_pipe()
-    self.stdout = uv.new_pipe()
-    self.stderr = uv.new_pipe()
+    self.stdin = vim.uv.new_pipe()
+    self.stdout = vim.uv.new_pipe()
+    self.stderr = vim.uv.new_pipe()
 
     local args = { device }
     if options.get().key then
@@ -80,12 +79,12 @@ function J:start(device)
         table.insert(args, options.parse_alterations(options.get().global_alterations))
     end
 
-    self.handle, self.pid = uv.spawn('lilypond-midi-input', {
+    self.handle, self.pid = vim.uv.spawn('lilypond-midi-input', {
         args = args,
         stdio = { self.stdin, self.stdout, self.stderr },
     }, self.callbacks.exit)
 
-    uv.read_start(self.stdout, function(err, data)
+    vim.uv.read_start(self.stdout, function(err, data)
         assert(not err, err)
         if data then
             vim.schedule(function()
@@ -98,7 +97,7 @@ function J:start(device)
         end
     end)
 
-    uv.read_start(self.stderr, function(err, data)
+    vim.uv.read_start(self.stderr, function(err, data)
         assert(not err, err)
         if data then
             vim.schedule(function()
@@ -113,7 +112,7 @@ end
 ---Stop the currently running job. Silently exit if not running.
 function J:stop()
     if self:is_running() then
-        uv.process_kill(self.handle, 1)
+        vim.uv.process_kill(self.handle, 1)
         self:clear()
     end
 end
