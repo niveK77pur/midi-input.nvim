@@ -97,7 +97,7 @@ local function checkOptions()
             final_warning = true
             vim.health.report_warn(
                 string.format([[Option '%s' has not been given a value.]], option.name),
-                option.warn_msg or {}
+                option.warn_msg or no_fallback_messages
             )
         else
             vim.health.report_ok(string.format([[Option '%s' was set to '%s']], option.name, option.value))
