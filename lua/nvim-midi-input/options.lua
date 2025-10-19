@@ -57,6 +57,14 @@ end
 ---@param func fun(choice: string) Function to apply on the chosen device name
 function O.query_devices(func)
     vim.ui.select(O.get_devices(), { prompt = 'Chose a MIDI input controller' }, function(choice)
+        if choice == nil then
+            vim.notify(
+                'No MIDI input controller selected. Aborting.',
+                vim.log.levels.ERROR,
+                require('nvim-midi-input').notify_table
+            )
+            return
+        end
         func(choice)
     end)
 end
