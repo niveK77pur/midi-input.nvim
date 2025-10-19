@@ -8,6 +8,7 @@
 :url-lmi-changing-options: https://github.com/niveK77pur/lilypond-midi-input#changing-options
 :url-lmi-options: https://github.com/niveK77pur/lilypond-midi-input#options
 :url-lmi-options-mode: https://github.com/niveK77pur/lilypond-midi-input#options-mode
+:url-lmi-options-octave-entry: https://github.com/niveK77pur/lilypond-midi-input#options-octave-entry
 :url-lmi-options-language: https://github.com/niveK77pur/lilypond-midi-input#options-language
 :url-lmi-options-accidentals: https://github.com/niveK77pur/lilypond-midi-input#options-accidentals
 :url-lmi-options-key: https://github.com/niveK77pur/lilypond-midi-input#options-key
@@ -364,6 +365,15 @@ Set the input mode for the backend. See {url-lmi-options-mode}[pass:q[`lilypond-
 [,lua]
 ----
 mode = 'pedal-chord'
+----
+
+==== Lilypond `octave_entry` for notes
+
+Set the input octave entry for the backend. See {url-lmi-options-octave-entry}[pass:q[`lilypond-midi-input`]'s options table].
+
+[,lua]
+----
+octave_entry = 'relative'
 ----
 
 ==== Lilypond note `language`
