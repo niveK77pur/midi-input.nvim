@@ -74,6 +74,10 @@ function J:start(device)
         table.insert(args, '--language')
         table.insert(args, options.get().language)
     end
+    if options.get().octave_entry then
+        table.insert(args, '--octave-entry')
+        table.insert(args, options.get().octave_entry)
+    end
     if options.get().alterations then
         table.insert(args, '--alterations')
         table.insert(args, options.parse_alterations(options.get().alterations))

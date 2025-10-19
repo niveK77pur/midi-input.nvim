@@ -83,6 +83,23 @@ function U.updateMidiLanguage(language) --  {{{
     end
 end --  }}}
 
+---Update/Change the octave entry mode. See `lilypond-midi-input --list-options octave-entry`.
+---@param octave_entry string? If not specified, the user will be prompted to select from a list of options.
+function U.updateOctaveEntry(octave_entry) --  {{{
+    if not job:is_running() then
+        return
+    end
+    if not octave_entry then
+        vim.ui.select(getOptions('octave-entry'), { prompt = 'Chose an octave entry mode' }, function(choice)
+            job:write(string.format('octave-entry=%s', choice))
+            options.set({ octave_entry = choice })
+        end)
+    else
+        job:write(string.format('octave-entry=%s', octave_entry))
+        options.set({ octave_entry = octave_entry })
+    end
+end --  }}}
+
 ---Update the alterations. See `lilypond-midi-input`'s documentation.
 ---@param alts Alterations|string
 function U.updateMidiAlterations(alts) --  {{{
@@ -135,6 +152,7 @@ function U.updateMidiOptions() --  {{{
         'accidentals',
         'mode',
         'language',
+        'octave entry',
         'alterations',
         'global alterations',
         'replace q',
@@ -144,6 +162,7 @@ function U.updateMidiOptions() --  {{{
             accidentals = U.updateMidiAccidentals,
             mode = U.updateMidiMode,
             language = U.updateMidiLanguage,
+            ['octave entry'] = U.updateOctaveEntry,
             alterations = U.updateMidiAlterations,
             ['global alterations'] = U.updateMidiGlobalAlterations,
             ['replace q'] = U.updateReplaceQ,

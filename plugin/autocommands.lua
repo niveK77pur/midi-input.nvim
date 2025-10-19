@@ -16,9 +16,12 @@ vim.api.nvim_create_autocmd({ 'ExitPre', 'VimLeavePre' }, {
 vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
     group = augroup_midideviceinput,
     pattern = { '*' },
-    desc = 'Find and set previous chord',
+    desc = 'Find and set previous chord (in absolute octave entry)',
     callback = function()
         if not (job:is_running(false) or debug.enabled('previous chord')) then
+            return
+        end
+        if not options.get().octave_entry == 'absolute' then
             return
         end
         local search_pattern = [[\v\<@<!\<\<@![^>]{-}\>]]
@@ -95,6 +98,33 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
             return
         end
         job:write(string.format('key=%s', key .. scale_short))
+    end,
+})
+
+vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
+    group = augroup_midideviceinput,
+    pattern = { '*' },
+    desc = 'Set relative octave entry options',
+    callback = function()
+        if not job:is_running(false) then
+            return
+        end
+        if not options.get().octave_entry == 'relative' then
+            return
+        end
+        -- do not clear `previous-absolute-note-reference`, so that user has
+        -- the ability to manually press; right before entering insert mode;
+        -- the previous absolute note reference relative to which the first
+        -- note after entering insert mode should be calculated.
+        --
+        -- If the user does not do this, there is a high chance the relative
+        -- octave is wrong anyways, so we should enable the
+        -- `octave-check-on-next-note` in any case.
+        --
+        -- This is assuming we have no way of knowing/finding the absolute
+        -- octave of the note right before the cursor upon entering insert
+        -- mode.
+        job:write(string.format('octave-check-on-next-note=%s', true))
     end,
 })
 

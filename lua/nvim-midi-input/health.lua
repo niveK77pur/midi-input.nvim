@@ -25,12 +25,24 @@ local function checkVersion()
         vim.health.warn(string.format('Could not parse lilypond-midi-input version; found: %s', version_str))
         return
     end
-    if vim.version.ge(version, { 0, 10, 0 }) then
+    local minimum_required_version = { 0, 11, 0 }
+    local minimum_required_version_str = vim.fn.join(minimum_required_version, '.')
+    if vim.version.ge(version, minimum_required_version) then
         vim.health.ok(
-            string.format('lilypond-midi-input is sufficiently up-to-date; requires at least 0.10, has %s', version_str)
+            string.format(
+                'lilypond-midi-input is sufficiently up-to-date; requires at least %s, has %s',
+                minimum_required_version_str,
+                version_str
+            )
         )
     else
-        vim.health.error(string.format('Update lilypond-midi-input to the latest version; found %s', version_str))
+        vim.health.error(
+            string.format(
+                'Update lilypond-midi-input to the latest version; requires at least %s, found %s',
+                minimum_required_version_str,
+                version_str
+            )
+        )
     end
 end
 
@@ -98,8 +110,8 @@ local function checkOptions()
             value = opts.get().language,
         },
         {
-            name = 'alterations',
-            value = opts.get().alterations,
+            name = 'octave_entry',
+            value = opts.get().octave_entry,
         },
         {
             name = 'global_alterations',

@@ -6,6 +6,7 @@
 ---@field accidentals string? Accidental style to use for out-of-key notes
 ---@field mode string? Input mode to use
 ---@field language string? Note language to use
+---@field octave_entry string? Octave entry to use
 ---@field alterations Alterations? Custom alterations within an octave
 ---@field global_alterations Alterations? Global alterations over all notes
 ---@field replace_q boolean Whether or not a `q` should be replaced in Replace mode
@@ -19,6 +20,7 @@ local options = {
     accidentals = nil,
     mode = nil,
     language = nil,
+    octave_entry = nil,
     alterations = nil,
     global_alterations = nil,
     replace_q = true,
