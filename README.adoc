@@ -369,7 +369,7 @@ mode = 'pedal-chord'
 
 ==== Lilypond `octave_entry` for notes
 
-Set the input octave entry for the backend. See {url-lmi-options-octave-entry}[pass:q[`lilypond-midi-input`]'s options table].
+Set the octave entry for the backend. See {url-lmi-options-octave-entry}[pass:q[`lilypond-midi-input`]'s options table].
 
 [,lua]
 ----
